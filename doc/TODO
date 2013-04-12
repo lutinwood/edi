@@ -1,0 +1,47 @@
+Bonjour,
+
+Afin d'améliorer l'utilisation de l'EDI en L1, j'ai relevé quelques petites choses à modifier.
+Il serait intéressant que quiconque ayant une remarque à formuler pour améliorer l'interface le fasse afin d'éliminer au maximum les divers problèmes rencontrés en TP.
+Voici les premières remarques :
+
+1) Faciliter l'installation sur les machines des étudiants. Il faudrait que l'étudiant puisse télécharger un exécutable qui réalise l'installation complète EDI+compilateur sans avoir à intervenir (pour le moment c'est assez fastidieux).
+
+2) Corriger les problèmes de chemins des fichiers. En particulier, pour le moment les répertoires contenant des espaces posent problème lors de la compilation (par exemple "Programmes files").
+
+3) Améliorer la coloration syntaxique. Par exemple colorer le readln au lieu du read (que l'on utilise pas), ou encore colorer tous les différents types de commentaires.
+
+4) Faire en sorte que la fenêtre reste ouverte à la fin de l'exécution du programme (même (surtout) en cas de plantage du programme).
+
+5) Faire en sorte que les messages du compilateur apparaissent en Français
+
+6) Lors de l'ouverture d'un fichier dans un programme, pouvoir utiliser le chemin relatif simplement (pour le moment le répertoire courant est celui du compilateur, ce qui fait qu'il ne trouve pas des fichiers se trouvant dans le même répertoire que l'exécutable, par exemple).
+
+7) Facultatif : pouvoir ajouter un fichier d'entrées lors de l'exécution d'un programme (équivalent à la ligne de commande "nomExecutable < mesEntrees.txt").
+
+Voilà pour le moment ce qui me vient à l'esprit, n'hésitez à ajouter vos propres remarques si vous en avez.
+
+Matthieu
+
+-- 
+Matthieu Basseur
+Assistant professor of Computer Science
+LERIA Laboratory / University of Angers - France
+phone: (+33) 241 73 52 94
+http://www.info.univ-angers.fr/pub/basseur
+
+12/04/2013
+---------
+Utilisation
+	*	Création d'un package debian
+	*	Création d'un autoextractable windows
+	*	Création d'une Manpage 
+	--
+Evolution
+	*	Amélioration coloration syntaxique (readln -vs read) + commentaire
+	*	Francisation des message du compilateur
+	*	Fenêtre active après plantage 
+
+Facultatifs
+	*	Chemin relatif ( par defaut ) à l'ouverture de fichier
+	*	 7 ?? execution de programme avec argument ( ligne de commande )
+ 
