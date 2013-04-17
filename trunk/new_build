@@ -7,6 +7,14 @@ echo "Création d'un répertoire build"
 mkdir build
 cd build
 echo "Génération du Makefile par CMAKE" 
-cmake ../src
-echo "Exécution du Makefile"
-make 
+cmake ../src 
+#-DCMAKE_INSTALL_PREFIX=/usr ..
+echo "Dénération du Paquet Debian"
+#cpack
+echo "test make package"
+make package 
+echo "taille du paquet debian"
+ls -ltr *.deb 
+
+#echo "Exécution du Makefile"
+#make 

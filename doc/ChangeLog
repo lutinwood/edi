@@ -1,0 +1,17 @@
+# ChangeLog
+
+--
+17/04/13
+---------
+Création de package Debian avec CPack 
+
+le script new_build crée un répertoire build dans lequel il cré un paquet debian binaire. 
+
+Paquet fonctionnel , mais a midifier pour diffusion
+
+TODO	:
+	-- modification du chemin du fichier de config
+	-- insertion d'un logo pour le programme 
+	-- création d'un package source 
+	-- création d'un auto executable Windows
+--
