@@ -1,0 +1,20 @@
+# Ces sources vous permettent de générer un package Ubuntu (DEBIAN)
+# Testé sur ubuntu 12.10. 
+
+## Installation qscintilla2-9
+Vous devez au préalable installé la librairies qscintilla2-9
+
+Vous devriez pouvoir utiliser n'importe lequel des miroirs de la liste en ajoutant une ligne au fichier /etc/apt/sources.list comme ceci :
+
+deb http://ubuntu.mirror.cambrium.nl/ubuntu/ raring main 
+	(as root) || sudo 
+	#apt-get update
+	#apt-get install libqscintilla2-9
+####
+
+# Installationd de LEP
+	(as root) || sudo
+	#dpkg -i LightEdiPascal_1.deb 
+
+# Lancement de l'applicatif 	
+LEP 
