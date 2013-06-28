@@ -21,5 +21,5 @@ QT4_WRAP_CPP( Moc_Eng ${EngineDef})
 ADD_LIBRARY(engine ${EngineSources} ${Moc_Eng} )
 
 # Liaison de libraries QtTest
-Target_Link_libraries(engine QtTest)
+Target_Link_libraries(engine QtTest QtGui)
 
