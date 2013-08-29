@@ -1,0 +1,12 @@
+#!/bin/bash
+if [ -d build ];
+	echo "Suppression du répertoire build existant !";
+	then rm -rf build;
+fi
+echo "Création d'un répertoire build"
+mkdir build
+cd build
+echo "Génération du Makefile par CMAKE" 
+cmake ../ 
+#-DCMAKE_INSTALL_PREFIX=/usr ..
+make VERBOSE=1 
