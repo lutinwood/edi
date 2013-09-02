@@ -1,6 +1,6 @@
 # Module FindQT.cmake 
 # /usr/share/cmake-2.8/Modules
-FIND_PACKAGE(Qt4 4.8.3 REQUIRED)
+FIND_PACKAGE(Qt4 4.8.1 REQUIRED)
 
 # Utilisation de la library QT 
 INCLUDE(${QT_USE_FILE})
