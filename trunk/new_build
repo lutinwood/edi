@@ -7,7 +7,7 @@ echo "Création d'un répertoire build"
 mkdir build
 cd build
 echo "Génération du Makefile par CMAKE" 
-cmake ../src
+cmake ../ -DCMAKE_SYSTEM_NAME=Linux
 make 
 #-DCMAKE_INSTALL_PREFIX=/usr ..
 #echo "Dénération du Paquet Debian"

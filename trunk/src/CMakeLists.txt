@@ -1,5 +1,5 @@
 # Version actuelle lors de la première édition de ce fichier
-CMAKE_MINIMUM_REQUIRED (VERSION 2.8.9)
+CMAKE_MINIMUM_REQUIRED (VERSION 2.8)
 
 # Nom du projet
 PROJECT (LightEdiPascal)
@@ -28,8 +28,22 @@ ADD_SUBDIRECTORY (engine)
 FIND_PACKAGE(Qscintilla REQUIRED)
 # Module FindQt.cmake
 # /usr/share/Modules
-FIND_PACKAGE(Qt4 4.8.3 REQUIRED QtCore QtGui QtXml)
 
+FIND_PACKAGE(Qt4 4.8.1 REQUIRED QtCore QtGui QtXml)
+
+IF(${QSCINTILLA_INCLUDE_DIR})
+	MESSAGE("OK")
+ELSE()
+	SET(QSCINTILLA_INCLUDE_DIR /opt/QT_static/include)
+	MESSAGE("NOT OK ${QSCINTILLA_INCLUDE_DIR}")
+ENDIF()
+	
+IF( NOT ${QSCINTILLA_LIBRARY})
+	SET(QSCINTILLA_LIBRARY /opt/QT_static/lib/libqscintilla2.a)
+	MESSAGE("NO LIB ${QSCINTILLA_LIBRARY}")
+ELSE()
+	MESSAGE("THERE IS ONE")
+ENDIF()
 ###		MOC FILES
 ###		
 # Génération de Fichier Moc 
@@ -50,8 +64,13 @@ INCLUDE_DIRECTORIES(${QSCINTILLA_INCLUDE_DIR})
 ###		EXE
 ###		
 IF(UNIX)
+
+SET(qt_include_dir /opt/QT_static/include/)
+MESSAGE(" INCLUDE FOLDER ${qt_include_dir}")
+include_directories(${qt_include_dir})
+link_directories(/opt/QT_static/lib)
 	ADD_EXECUTABLE(LEP ${SRC} ${MOC_SRCS} ${RSRC} ${Moc_Eng} ${engine})
-	TARGET_LINK_LIBRARIES (LEP ${QSCINTILLA_LIBRARY} ${QT_LIBARIES} engine ${QT_QTEST_LIBRARY} QtTest QtCore)
+	TARGET_LINK_LIBRARIES (LEP ${QSCINTILLA_LIBRARY} ${QT_LIBARIES} engine ${QT_QTEST_LIBRARY} QtGui QtTest QtCore pthread X11 xcb Xrender Xext rt)
 ENDIF()
 
 IF(WINDOWS)

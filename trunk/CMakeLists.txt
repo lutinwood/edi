@@ -1,5 +1,5 @@
 #Version actuelle lors de la première édition de ce fichier
-CMAKE_MINIMUM_REQUIRED (VERSION 2.8.9)
+CMAKE_MINIMUM_REQUIRED (VERSION 2.8)
 
 # Nom du projet
 PROJECT (LightEdiPascal)
