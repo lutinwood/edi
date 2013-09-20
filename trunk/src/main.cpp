@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include <QApplication>
-
+#include <QFont>
 #include "mainwindow.h"
 
 int main(int argc, char *argv[])
@@ -31,15 +31,19 @@ int main(int argc, char *argv[])
     #if defined(Q_OS_WIN)
 	translator.load("qt_fr","C:\Qt\4.2.3\translations");
     #else 
-    	translator.load("qt_fr","/usr/share/qt4/translations");
+    	translator.load("qt_fr","/opt/QT_static/translations");
     #endif
-//     translator.load("/usr/share/qt4/translations/qscintilla_fr");
     app.installTranslator(&translator);
 
+	//app.setFont(QFont ("OpenSymbol", 12));
+	app.setFont(QFont ("Gothic", 18));
     QSplashScreen splash(QPixmap(QString(":/images/splashscreen.png"),0,Qt::AutoColor),0);
     splash.show();
     MainWindow mainWin;
     mainWin.show();
     splash.finish(&mainWin);
+QFontDatabase database;
+foreach(QString fontname, database.families())
+    qDebug() << fontname;
     return app.exec();
 }
