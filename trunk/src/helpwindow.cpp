@@ -56,15 +56,21 @@ HelpWindow::HelpWindow(QWidget * parent, Qt::WFlags f) : QMainWindow(parent, f)
         {
            QFile *file = new QFile(QString("conf.ini"));
             file->open(QIODevice::ReadOnly);
-            if (!m_OS)
-            {//si l'OS est linux
+
+#if defined Q_OS_LINUX
+DOC_PATH = new QString("DOC_PATH_X11=");
+m_PATH = new QString("doc/"); 
+#elif Q_OS_WIN
+DOC_PATH = new QString("DOC_PATH_WIN32=");
+m_PATH = new QString(QLatin1String("doc\\"));
+#endif
                 while (!file->atEnd())
                 {
                     QByteArray buffer(file->readLine());	
                     QString path(buffer);
-                    if (path.contains("DOC_PATH_X11="))
+                    if (path.contains(DOC_PATH))
                     {//si le path est trouvé
-                        QString ch(path.section("DOC_PATH_X11=",1,-1));
+                        QString ch(path.section(DOC_PATH,1,-1));
                         m_PATH= new QString(ch.simplified());
                     }
                     if (path.contains("DOC_INDEX="))
@@ -73,31 +79,13 @@ HelpWindow::HelpWindow(QWidget * parent, Qt::WFlags f) : QMainWindow(parent, f)
                         m_INDEX= new QString(ch.simplified());
                     }
                 }
-            }
-            else{//si l'OS est Windows
-                while (!file->atEnd())
-                {
-                    QByteArray buffer(file->readLine());	
-                    QString path(buffer);
-                    if (path.contains("DOC_PATH_WIN32="))
-                    {//si le path est trouvé
-                        QString ch(path.section("DOC_PATH_WIN32=",1,-1));
-                        m_PATH= new QString(ch.simplified());
-                    }
-                    if (path.contains("DOC_INDEX="))
-                    {//si le path est trouvé
-                        QString ch(path.section("DOC_INDEX=",1,-1));
-                        m_INDEX= new QString(ch.simplified());
-                    }
-                }
+            
+                
             }
             file->close();
         }
         else {//si le fichier de config n'existe pas, path définit par défaut
             m_INDEX = new QString("ref.html");
-            if (!m_OS)
-                m_PATH = new QString("doc/");
-            else m_PATH = new QString(QLatin1String("doc\\"));
         }
 	listPath << (*m_PATH) ;
 	m_textBrowser->setSearchPaths(listPath);

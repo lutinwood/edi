@@ -380,11 +380,19 @@ void MainWindow::compileAndRun()
             (m_compiler->m_prog)->waitForFinished(-1);
         if (m_compiler->m_OutputStream !=NULL)
         {
-            if (!(m_compiler->m_OutputStream)->contains("compilation aborted",Qt::CaseInsensitive))
+            if (!(m_compiler->m_OutputStream)->
+			contains("compilation aborted",Qt::CaseInsensitive))
             {//si la compilation à réussie
                 emit run(m_curFile);
             }
-            else QMessageBox::warning(NULL,QObject::tr("Attention"),QObject::tr("La compilation a échoué. Le programe ne peut donc pas être lancé. Veuillez corriger les erreurs de votre programme puis réitérer l'opération."));
+            else QMessageBox::warning(NULL,
+		QObject::tr("Attention"),
+		QObject::tr(
+		"La compilation a échoué. \
+		Le programe ne peut donc pas être lancé. \
+		Veuillez corriger les erreurs de votre programme puis \
+		réitérer l'opération."
+		));
         }
     }
 }
@@ -410,9 +418,18 @@ void MainWindow::debug()
                     *(m_debug->m_ErrorStream) = "";
                 emit debug(m_curFile);
                 connect(m_killAct,SIGNAL(triggered()),m_debug,SLOT(kill()));
-                disconnect(m_textEdit,SIGNAL(marginClicked(int,int,Qt::KeyboardModifiers)),this,SLOT(marginClicked(int,int,Qt::KeyboardModifiers)));
+                disconnect(	m_textEdit,
+				SIGNAL(marginClicked(int,int,Qt::KeyboardModifiers)),
+				this,SLOT(marginClicked(int,int,Qt::KeyboardModifiers)));
             }
-            else QMessageBox::warning(NULL,QObject::tr("Attention"),QObject::tr("La compilation a échoué. Le programe ne peut donc pas être débogué. Veuillez corriger les erreurs de votre programme puis réitérer l'opération."));
+            else QMessageBox::warning(NULL,
+		QObject::tr("Attention"),
+		QObject::tr(
+		"La compilation a échoué. \
+		Le programe ne peut donc pas être débogué. \
+		Veuillez corriger les erreurs de votre programme \
+		puis réitérer l'opération."
+		));
         }
     }
 }
@@ -453,54 +470,6 @@ void MainWindow::displayCompile(QString str)
         m_previousCompileErrorAct->setEnabled(false);
         m_textEdit->setCaretLineBackgroundColor(QColor(244, 244, 255));
     }
-/*
-    //on vide la liste des messages de compilations
-    m_compilerOutput->clear();
-    m_compilerOutput->addItems(str);
-    m_compilerOutput->loadErrorList(str);
-    bool containsError = false;
-    QStringList::Iterator it2;
-    for(it2 = str.begin() ; it2 != str.end() ; it2++)
-    {
-        if ((*it2).contains("la compilation a échoué",Qt::CaseInsensitive) || (*it2).contains("compilation aborted",Qt::CaseInsensitive))
-        {
-            containsError = true;
-            break;
-        }
-    }
-    //on cherche à afficher la première erreur si la compilation a échouée
-    if (containsError)
-    {
-        m_nextCompileErrorAct->setEnabled(true);
-        m_previousCompileErrorAct->setEnabled(true);
-        int it = 0 ;
-        int nb = it;
-        int nbItem = it;
-        bool find = false;
-        while ((it <= str.size()-1))
-        {
-            if (((str.at(it)).contains("Fatal",Qt::CaseInsensitive) || (str.at(it)).contains("Error",Qt::CaseInsensitive) || (str.at(it)).contains("Warning",Qt::CaseInsensitive)) && !find)
-            {
-                nbItem = nb;
-                find = true;
-            }
-            if ((str.at(it)).contains("Fatal",Qt::CaseInsensitive) || (str.at(it)).contains("Error",Qt::CaseInsensitive) || (str.at(it)).contains("Warning",Qt::CaseInsensitive))
-            {
-                m_compilerOutput->setCurrentRow(nb);
-                this->itemDoubleClicked(m_compilerOutput->currentItem());
-            }
-            nb++;
-            it++;
-        }
-        m_compilerOutput->setCurrentRow(nbItem);
-        this->itemDoubleClicked(m_compilerOutput->currentItem());
-        m_textEdit->setCaretLineBackgroundColor(QColor(255, 198, 190));
-    }
-    else{
-        m_textEdit->setCaretLineBackgroundColor(QColor(244, 244, 255));
-        m_nextCompileErrorAct->setEnabled(false);
-        m_previousCompileErrorAct->setEnabled(false);
-    }*/
 }
 
 //affiche dans la barre d'outil le résultat du flux de sortie de l'application pascal
@@ -884,26 +853,33 @@ void MainWindow::initFileconf()
     if (!QFile::exists("conf.ini"))
     {
         QFile file("conf.ini");
+
         file.open(QIODevice::WriteOnly);
+#if defined Q_OS_LINUX
         file.write("--> Chemin menant au compilateur FPC sous Linux <--\n");
         file.write("FPC_PATH_X11=/usr/bin/fpc\n");
-        file.write("--> Chemin menant au compilateur FPC sous Windows <--\n");
-        file.write("FPC_PATH_WIN32=C:\\FPC\\2.1.4\\bin\\i386-win32\\fpc.exe\n");
-        file.write("--> Arguments du compilateur FPC <--\n");
+	file.write("--> Arguments du compilateur FPC <--\n");
         file.write("FPC_ARGS=-g -Fr /usr/lib/fpc/2.6.0/msg/errorfr.msg \n");
         file.write("--> Chemin menant au débogueur GDB sous Linux <--\n");
         file.write("GDB_PATH_X11=/usr/bin/gdb\n");
-        file.write("--> Chemin menant au compilateur GDB sous Windows <--\n");
-        file.write("GDB_PATH_WIN32=C:\\MinGw\\bin\\gdb.exe\n");
         file.write("--> Chemin menant aux différents terminaux sous Linux <--\n");
         file.write("TERM_PATH_X11=/usr/bin/konsole,/usr/bin/gnome-terminal,/usr/bin/xterm\n");
+        file.write("--> Chemin du dossier contenant la documentation sous Linux <--\n");
+        file.write("DOC_PATH_X11=~/.EDI/doc\n");
+
+#elif defined Q_OS_WIN32
+       	file.write("--> Chemin menant au compilateur FPC sous Windows <--\n");
+        file.write("FPC_PATH_WIN32=C:\\FPC\\2.1.4\\bin\\i386-win32\\fpc.exe\n");
+        file.write("--> Chemin menant au compilateur GDB sous Windows <--\n");
+        file.write("GDB_PATH_WIN32=C:\\MinGw\\bin\\gdb.exe\n");
         file.write("--> Chemin menant au terminal de Windows <--\n");
         file.write("TERM_PATH_WIN32=C:\\WINDOWS\\system32\\cmd.exe\n");
-        file.write("--> Chemin du dossier contenant la documentation sous Linux <--\n");
-        file.write("DOC_PATH_X11=/home/coolpak/EDI/bin/doc\n");
         file.write("--> Chemin du dossier contenant la documentation sous Windows <--\n");
         file.write("DOC_PATH_WIN32=doc\\fpdocs-2.0.4\\\n");
-        file.write("--> Nom du fichier index de la documentation <--\n");
+
+#endif
+        
+	file.write("--> Nom du fichier index de la documentation <--\n");
         file.write("DOC_INDEX=ref.html\n");
         file.write("--> Affichage des composants de debogue <--\n");
         file.write("DEBUG_DISPLAY=0\n");
@@ -933,8 +909,12 @@ void MainWindow::initScintilla()
     //mise en place de la ligne de surbrillance
     m_textEdit->setCaretLineVisible(true);
     m_textEdit->setCaretLineBackgroundColor(QColor(244, 244, 255));
-    connect(m_textEdit,SIGNAL(marginClicked(int,int,Qt::KeyboardModifiers)),this,SLOT(marginClicked(int,int,Qt::KeyboardModifiers)));
-    connect(m_textEdit,SIGNAL(cursorPositionChanged(int,int)),this,SLOT(cursorPositionChanged(int,int)));
+    connect(m_textEdit,
+	SIGNAL(marginClicked(int,int,Qt::KeyboardModifiers)),
+	this,SLOT(marginClicked(int,int,Qt::KeyboardModifiers)));
+    connect(m_textEdit,
+	SIGNAL(cursorPositionChanged(int,int)),
+	this,SLOT(cursorPositionChanged(int,int)));
 }
 
 //créations des différentes actions possibles
@@ -1038,16 +1018,6 @@ void MainWindow::createActions()
     connect(m_selectAllAct,SIGNAL(triggered()),this,SLOT(selectAll()));
     connect(this,SIGNAL(selectAll(bool)),m_textEdit,SLOT(selectAll(bool)));
 
-   /* m_zoomInAct = new QAction(QIcon(":/images/zoom-in.png"),tr("&Zoom avant"),this);
-    m_zoomInAct->setShortcut(tr("Ctrl++"));
-    m_zoomInAct->setStatusTip(tr("Zoom avant"));
-    connect(m_zoomInAct,SIGNAL(triggered()),m_textEdit,SLOT(zoomIn()));
-
-    m_zoomOutAct = new QAction(QIcon(":/images/zoom-out.png"),tr("&Zoom arrière"),this);
-    m_zoomOutAct->setShortcut(tr("Ctrl+-"));
-    m_zoomOutAct->setStatusTip(tr("Zoom arrière"));
-    connect(m_zoomInAct,SIGNAL(triggered()),m_textEdit,SLOT(zoomOut()));
-*/
     m_compileAct = new QAction(QIcon(":/images/compile.png"),tr("&Compiler"),this);
     m_compileAct->setShortcut(tr("F8"));
     m_compileAct->setStatusTip(tr("Compiler"));
@@ -1082,7 +1052,6 @@ void MainWindow::createActions()
     m_killAct->setEnabled(false);
 
     m_toolBarDisplayAct = new QAction(tr("&Barre d'outils"),this);
-    //m_compileAct->setShortcut(tr("Ctrl+A"));
     m_toolBarDisplayAct->setStatusTip(tr("Barre d'outils"));
     m_toolBarDisplayAct->setCheckable(true);
     m_toolBarDisplayAct->setChecked(true);
@@ -1166,9 +1135,6 @@ void MainWindow::createMenus()
     m_editMenu->addAction(m_copyAct);
     m_editMenu->addAction(m_pasteAct);
     m_editMenu->addSeparator();
-    /*m_editMenu->addAction(m_zoomInAct);
-    m_editMenu->addAction(m_zoomOutAct);
-    m_editMenu->addSeparator();*/
     m_editMenu->addAction(m_selectAllAct);
     m_editMenu->addSeparator();
     m_editMenu->addAction(m_removeAct);

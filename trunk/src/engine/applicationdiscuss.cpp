@@ -24,7 +24,6 @@ using namespace std;
 
 ApplicationDiscuss::ApplicationDiscuss(QObject *parent) : GlobalDiscuss(parent)
 {
-	//FileConf();
         connect(this,SIGNAL(displayStream(QString)),parent,SLOT(displayApplication(QString)));
 }
 
@@ -60,7 +59,8 @@ void ApplicationDiscuss::writeErrorStream()
             strError = QString(m_prog->readAllStandardError());
             (*m_ErrorStream) += (*m_ErrorStream)+strError;
         }
-        emit displayStream(*m_ErrorStream);
+
+        emit displayStream(*m_ErrorStream);//Debug
 }
 
 
@@ -76,7 +76,7 @@ void ApplicationDiscuss::writeOutputStream()
             strOutput = QString(m_prog->readAllStandardOutput());
             (*m_OutputStream) += strOutput;
         }
-        emit displayStream(*m_OutputStream);
+        emit displayStream(*m_OutputStream); // debug
 }
 
 //redéfinition de la fonction Execute
@@ -88,8 +88,10 @@ void ApplicationDiscuss::Execute(QString appName)
         //on récupère la chaîne sans le .pas
         QString str_tmp(appName.leftJustified(appName.length()-4,'.',true));
         //on rajoute le .exe si l'OS est windows
-        if (m_OS)
+       // if (m_OS)
+#if defined(_Win32)|| defined(__Win64)
             str_tmp += tr(".exe");
+#endif
         if (m_prog == NULL)
             m_prog = new QProcess(this);
         if (m_OutputStream!=NULL)
@@ -98,26 +100,25 @@ void ApplicationDiscuss::Execute(QString appName)
         connect(m_prog,SIGNAL( readyReadStandardOutput()),this,SLOT(writeOutputStream()));
         connect(m_prog,SIGNAL(started()),this,SLOT(started()));
         connect(m_prog,SIGNAL(finished(int,QProcess::ExitStatus)),this,SLOT(finished(int,QProcess::ExitStatus)));
-        QStringList list;
-        if (!m_OS)
-        {//si l'OS est linux
+        QStringList list;  
+      
+#if defined(__linux__)
             list << "-hold -e" << str_tmp ;
             m_prog->start((*m_console),list);
-        }
-        else{//si l'OS est windows
-            //on lance la console
+#elif defined(_Win32)
             m_prog->start((*m_console));
             //puis on lance l'application avec start
             m_prog->write(QString(tr("start /Q ")+str_tmp+tr("\n")).toLatin1());
             m_prog->write("exit\n");
-        }
+#endif  
     }
 }
 
 void ApplicationDiscuss::displayOutputStream(int exitCode, QProcess::ExitStatus exitStatus )
 {
-//     QStringList str(m_OutputStream->split("\n"));
-//    emit displayStream(str);
+    QStringList str(m_OutputStream->split("\n"));
+
+    emit displayStream(str);//debug
 }
 
 void ApplicationDiscuss::errorProcess(QProcess::ProcessError error)
@@ -127,7 +128,8 @@ void ApplicationDiscuss::errorProcess(QProcess::ProcessError error)
     if (m_OutputStream == NULL)
         m_OutputStream = new QString(str);
     else (*m_OutputStream) += str;
-    emit displayStream(*m_OutputStream);
+
+    emit displayStream(*m_OutputStream);//debug
 }
 
 void ApplicationDiscuss::stateChanged ( QProcess::ProcessState newState )
@@ -148,18 +150,20 @@ void ApplicationDiscuss::stateChanged ( QProcess::ProcessState newState )
     if (m_OutputStream == NULL)
         m_OutputStream = new QString(str);
     else (*m_OutputStream) += str;
-    emit displayStream(*m_OutputStream);
+
+    emit displayStream(*m_OutputStream);//debug
 }
 
 void ApplicationDiscuss::finished ( int exitCode, QProcess::ExitStatus exitStatus)
 {
     QString str("Fin de l'application.\n");
-    //str += exitCode;
     if (m_OutputStream == NULL)
         m_OutputStream = new QString(str);
     else (*m_OutputStream) += str;
-    emit displayStream(*m_OutputStream);
-    kill();
+    
+	emit displayStream(*m_OutputStream);//debug
+	    
+	kill();
 }
 
 void ApplicationDiscuss::started()
@@ -168,5 +172,6 @@ void ApplicationDiscuss::started()
     if (m_OutputStream == NULL)
         m_OutputStream = new QString(str);
     else (*m_OutputStream) += str;
-    emit displayStream(*m_OutputStream);
+
+    emit displayStream(*m_OutputStream);//debug
 }

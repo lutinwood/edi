@@ -61,72 +61,48 @@ void SettingWindow::loadFile()
     {
         QFile *file = new QFile(QString("conf.ini"));
         file->open(QIODevice::ReadOnly);
-        if (!m_OS)
-        {//si l'OS est linux
-            while (!file->atEnd())
+#if define Q_OS_LINUX
+FPC_PATH = new QString("FPC_PATH_X11=");
+GDB_PATH = new QString("GDB_PATH_X11=");
+DOC_PATH = new QString("DOC_PATH_X11=");
+#elif Q_OS_WIN32
+FPC_PATH = new QString("FPC_PATH_WIN32=");
+GDB_PATH = new QString("GDB_PATH_WIN32=");
+DOC_PATH = new QString("DOC_PATH_WNI32=");
+
+#endif
+ QString fpcPath;
+    QString gdbPath;
+    QString docPath;
+    QString docIndex;
+     
+       while (!file->atEnd())
             {
                 QByteArray buffer(file->readLine());	
                 QString path(buffer);
-                if (path.contains("FPC_PATH_X11="))
+                if (path.contains(FPC_PATH))
                 {//si le path est trouvé
-                    QString ch(path.section("FPC_PATH_X11=",1,-1));
-                    m_fpcPathX11->setText(ch.simplified());
+                    QString ch(path.section(FPC_PATH,1,-1));
+                    m_fpcPathtemp->setText(ch.simplified());
+		fpcPath = QString((m_fpcPathtemp->text()).simplified());
                 }
-                if (path.contains("GDB_PATH_X11="))
+                if (path.contains(GDB_PATH))
                 {
-                    QString ch(path.section("GDB_PATH_X11=",1,-1));
-                    m_gdbPathX11->setText(ch.simplified());
-                }
-                if (path.contains("DOC_PATH_X11="))
+                    QString ch(path.section(GDB_PATH,1,-1));
+                    m_gdbPathtemp->setText(ch.simplified());
+                gdbPath = QString((m_gdbPathtemp->text()).simplified());
+		}
+                if (path.contains(DOC_PATH))
                 {
-                    QString ch(path.section("DOC_PATH_X11=",1,-1));
-                    m_docPathX11->setText(ch.simplified()); 
-                }
+                    QString ch(path.section(DOC_PATH,1,-1));
+                    m_docPathtemp->setText(ch.simplified()); 
+                docPath = QString((m_docPathtemp->text()).simplified());
+		}
                 if (path.contains("DOC_INDEX="))
                 {
                     QString ch(path.section("DOC_INDEX=",1,-1));
-                    m_docIndexX11->setText(ch.simplified()); 
-                }
-                if (path.contains("FPC_ARGS="))
-                {
-                    QString ch(path.section("FPC_ARGS=",1,-1));
-		    QString ch_tmp(ch.simplified());
-                    (*m_args) += ch_tmp.split(" ");
-                }
-                if (path.contains("DEBUG_DISPLAY="))
-                {
-                    QString ch(path.section("DEBUG_DISPLAY=",1,-1));
-		    QString ch_tmp(ch.simplified());
-                    if (m_debugDisplay != NULL)
-                        delete m_debugDisplay;
-                    m_debugDisplay = new QString(ch_tmp);
-                }
-            }
-        }
-        else{
-            while (!file->atEnd())
-            {
-                QByteArray buffer(file->readLine());	
-                QString path(buffer);
-                if (path.contains("FPC_PATH_WIN32="))
-                {//si le path est trouvé
-                    QString ch(path.section("FPC_PATH_WIN32=",1,-1));
-                    m_fpcPathWIN32->setText(ch.simplified());
-                }
-                if (path.contains("GDB_PATH_WIN32="))
-                {
-                    QString ch(path.section("GDB_PATH_WIN32=",1,-1));
-                    m_gdbPathWIN32->setText(ch.simplified());
-                }
-                if (path.contains("DOC_PATH_WIN32="))
-                {
-                    QString ch(path.section("DOC_PATH_WIN32=",1,-1));
-                    m_docPathWIN32->setText(ch.simplified()); 
-                }
-                if (path.contains("DOC_INDEX="))
-                {
-                    QString ch(path.section("DOC_INDEX=",1,-1));
-                    m_docIndexWIN32->setText(ch.simplified()); 
+                    m_docIndextmp->setText(ch.simplified()); 
+		docIndex = QString((m_docIndextemp->text()).simplified());
                 }
                 if (path.contains("FPC_ARGS="))
                 {
@@ -142,7 +118,7 @@ void SettingWindow::loadFile()
                         delete m_debugDisplay;
                     m_debugDisplay = new QString(ch_tmp);
                 }
-            }
+           
         }
     file->close();
     }
@@ -207,24 +183,6 @@ void SettingWindow::saveFile()
         (*m_args) << "-OG";
     if (m_OgOption->isChecked())
         (*m_args) << "-Og";
-    //chargement des chemins des différentes applications
-    QString fpcPath;
-    QString gdbPath;
-    QString docPath;
-    QString docIndex;
-    if (m_OS)
-    {//si l'OS est windows
-        fpcPath = QString((m_fpcPathWIN32->text()).simplified());
-        gdbPath = QString((m_gdbPathWIN32->text()).simplified());
-        docPath = QString((m_docPathWIN32->text()).simplified());
-        docIndex = QString((m_docIndexWIN32->text()).simplified());
-    }
-    else {//si l'OS est linux
-        fpcPath = QString((m_fpcPathX11->text()).simplified());
-        gdbPath = QString((m_gdbPathX11->text()).simplified());
-        docPath = QString((m_docPathX11->text()).simplified());
-        docIndex = QString((m_docIndexX11->text()).simplified());
-    }
     //on sauvegarde après les préférences dans le fichier de configuration
     if (QFile::exists("conf.ini"))
     {
@@ -242,22 +200,20 @@ void SettingWindow::saveFile()
             {
                 (*it) = QString("FPC_ARGS=") + (*m_args).join(" ");
             }
-            if (m_OS)
-            {//si l'OS est windows
                 //sauvegarde du chemin de fpc
-                if ((*it).contains("FPC_PATH_WIN32="))
+                if ((*it).contains(FPC_PATH))
                 {
-                    (*it) = QString("FPC_PATH_WIN32=") + fpcPath;
+                    (*it) = QString(FPC_PATH) + fpcPath;
                 }
                 //sauvegarde du chemin de gdb
-                if ((*it).contains("GDB_PATH_WIN32="))
+                if ((*it).contains(GDB_PATH))
                 {
-                    (*it) = QString("GDB_PATH_WIN32=") + gdbPath;
+                    (*it) = QString(GDB_PATH) + gdbPath;
                 }
                 //sauvegarde du chemin de la doc
-                if ((*it).contains("DOC_PATH_WIN32="))
+                if ((*it).contains(DOC_PATH))
                 {
-                    (*it) = QString("DOC_PATH_WIN32=") + docPath;
+                    (*it) = QString(DOC_PATH) + docPath;
                 }
                 if ((*it).contains("DOC_INDEX="))
                 {
@@ -268,32 +224,7 @@ void SettingWindow::saveFile()
                     (*it) = QString("DEBUG_DISPLAY=") + debug;
                 }
             }
-            else{//si l'OS est linux
-                //sauvegarde du chemin de fpc
-                if ((*it).contains("FPC_PATH_X11="))
-                {
-                    (*it) = QString("FPC_PATH_X11=") + fpcPath;
-                }
-                //sauvegarde du chemin de gdb
-                if ((*it).contains("GDB_PATH_X11="))
-                {
-                    (*it) = QString("GDB_PATH_X11=") + gdbPath;
-                }
-                //sauvegarde du chemin de la doc
-                if ((*it).contains("DOC_PATH_X11="))
-                {
-                    (*it) = QString("DOC_PATH_X11=") + docPath;
-                }
-                if ((*it).contains("DOC_INDEX="))
-                {
-                    (*it) = QString("DOC_INDEX=") + docIndex;
-                }
-                if ((*it).contains("DEBUG_DISPLAY="))
-                {
-                    (*it) = QString("DEBUG_DISPLAY=") + debug;
-                }
-            }
-        }
+        
         file.remove();
         QFile file2("conf.ini");
         file2.open(QIODevice::WriteOnly);

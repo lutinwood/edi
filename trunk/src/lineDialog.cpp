@@ -37,11 +37,8 @@ LineDialog::LineDialog(QWidget *parent) : QDialog(parent)
     m_closeButton = new QPushButton(tr("Quitter"));
     connect(m_lineEdit, SIGNAL(textChanged(const QString &)),
         this, SLOT(enableOkButton(const QString &)));
-   /*connect(m_lineEditReplace, SIGNAL(textChanged(const QString &)),
-        this, SLOT(enableReplaceButton(const QString &)));
-    connect(findButton, SIGNAL(clicked()),
-        this, SLOT(findClicked()));
-    */connect(m_goButton, SIGNAL(clicked()),
+	
+	connect(m_goButton, SIGNAL(clicked()),
         this, SLOT(goClicked()));
     connect(m_closeButton, SIGNAL(clicked()),
         this, SLOT(close()));

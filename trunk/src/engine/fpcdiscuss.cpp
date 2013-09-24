@@ -64,7 +64,8 @@ void FpcDiscuss::FileConf()
         QFile *file = new QFile(QString("conf.ini"));
         file->open(QIODevice::ReadOnly);
         if (!m_OS)
-        {//si l'OS est linux
+       
+#if defined (__linux__) 
             while (!file->atEnd() && !find)
             {
                 QByteArray buffer(file->readLine());	
@@ -76,8 +77,8 @@ void FpcDiscuss::FileConf()
                     find = true;
                 }
             }
-        }
-        else{//si l'OS est Windows
+#elif defined (_WIN32) ||(_WIN64) 
+       
             while (!file->atEnd() && !find)
             {
                 QByteArray buffer(file->readLine());	
@@ -89,14 +90,16 @@ void FpcDiscuss::FileConf()
                     find = true;
                 }
             }
-        }
+#endif
         file->close();
     }
     else {//si le fichier de config n'existe pas, path définit par défaut
-        if (!m_OS)
-            m_PATH = new QString("/usr/bin/fpc");
-        else m_PATH = new QString("C:\\FPC\\2.1.4\\bin\\i386-win32\\fpc.exe");
-    }
+#if defined (__linux__)
+            	m_PATH = new QString("/usr/bin/fpc");
+#elif defined (_WIN32) || (_WIN64)
+		m_PATH = new QString("C:\\FPC\\2.1.4\\bin\\i386-win32\\fpc.exe");
+#endif
+	}
 }
 
 //écriture du flux d'erreur

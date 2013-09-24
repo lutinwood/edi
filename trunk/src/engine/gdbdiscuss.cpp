@@ -62,28 +62,18 @@ void GdbDiscuss::FileConf()
     {
         QFile *file = new QFile(QString("conf.ini"));
         file->open(QIODevice::ReadOnly);
-        if (!m_OS)
-        {//si l'OS est linux
+#if defined Q_OS_LINUX
+      QString gdb_path = new QString("GDB_PATH_X11=");
+#elif defined Q_OS_WIN
+      QString gdb_path = new QString("GDB_PATH_WIN32=");
+#endif
             while (!file->atEnd() && !find)
             {
                 QByteArray buffer(file->readLine());	
                 QString path(buffer);
-                if (path.contains("GDB_PATH_X11="))
+                if (path.contains(gdb_path))
                 {//si le path est trouvé
-                    QString ch(path.section("GDB_PATH_X11=",1,-1));
-                    m_PATH= new QString(ch.simplified());
-                    find = true;
-                }
-            }
-        }
-        else{//si l'OS est Windows
-            while (!file->atEnd() && !find)
-            {
-                QByteArray buffer(file->readLine());	
-                QString path(buffer);
-                if (path.contains("GDB_PATH_WIN32="))
-                {//si le path est trouvé
-                    QString ch(path.section("GDB_PATH_WIN32=",1,-1));
+                    QString ch(path.section(gdb_path,1,-1));
                     m_PATH= new QString(ch.simplified());
                     find = true;
                 }
@@ -92,9 +82,11 @@ void GdbDiscuss::FileConf()
         file->close();
     }
     else {//si le fichier de config n'existe pas, path définit par défaut
-        if (!m_OS)
-            m_PATH = new QString("/usr/bin/gdb");
-        else m_PATH = new QString(QLatin1String("C:\\MinGw\\bin\\gdb.exe"));
+#if defined Q_OS_LINUX
+	m_PATH = new QString("/usr/bin/gdb");
+#elif defined Q_OS_WIN
+	m_PATH = new QString(QLatin1String("C:\\MinGw\\bin\\gdb.exe"));
+#endif
     }
 }
 
@@ -139,28 +131,22 @@ void GdbDiscuss::Execute(QString appName)
     {
         //on récupère la chaîne sans le .pas
         QString str_tmp(appName.leftJustified(appName.length()-4,'.',true));
-        if (m_OS)
+ #if defined Q_OS_WIN
             str_tmp += tr(".exe");
+#endif
         m_prog = new QProcess(this);
-        #if defined(Q_OS_WIN)
-        #else
             if (m_terminal == NULL)
                 m_terminal = new QProcess(this);
-        #endif
         connect(m_prog,SIGNAL( readyReadStandardError()),this,SLOT(writeErrorStream()));
         connect(m_prog,SIGNAL( readyReadStandardOutput()),this,SLOT(writeOutputStream()));
         connect(m_prog,SIGNAL(finished(int,QProcess::ExitStatus)),this,SLOT(finished(int,QProcess::ExitStatus)));
-        //connect(m_prog,SIGNAL(error(QProcess::ProcessError)),this,SLOT(errorProcess( QProcess::ProcessError)));
         connect(m_prog,SIGNAL(started()),this,SLOT(started()));
-        //connect(m_prog,SIGNAL(stateChanged(QProcess::ProcessState)),this,SLOT(stateChanged (QProcess::ProcessState)));
         connect(m_prog,SIGNAL(bytesWritten(qint64)),this,SLOT(send(qint64)));
         if (appName!="")
         {
             emit setDebugEnabled(true);
             QStringList listArg;
-            if (!m_OS)
-            {//si l'OS est linux
-                //si le fichier existe on le supprime
+#if defined Q_OS_LINUX
                 if (QFile::exists(("/tmp/montty_xxxxx")))
                 {
                     QFile fileRemoveTty("/tmp/montty_xxxxx");
@@ -187,12 +173,11 @@ void GdbDiscuss::Execute(QString appName)
                     m_terminal->write(((*m_console)+tr(" --command=\"sh -c 'tty >> /tmp/montty_xxxxx; ps >> /tmp/monpid_xxxxx; trap INT QUIT TSTP; exec<&-;exec>&-; while :;do sleep 3600;done'\"\n")).toLatin1());
                 if ((*m_console).contains("xterm"))
                     m_terminal->write((tr("xterm -e sh -c 'tty >> /tmp/montty_xxxxx; ps >> /tmp/monpid_xxxxx; trap INT QUIT TSTP; exec<&-; exec>&-; while :; do sleep 3600; done '\n")).toLatin1());
-                #if defined(Q_OS_WIN)
-                #else
+            
                     int i = 0;
                     while (!QFile::exists("/tmp/montty_xxxxx") && !QFile::exists("/tmp/monpid_xxxxx") && i++ < 8)
                         QTest::qWait(500);
-                #endif
+                
                 //on récupère le tty de la commande lancée
                 if (QFile::exists("/tmp/montty_xxxxx"))
                 {
@@ -227,14 +212,16 @@ void GdbDiscuss::Execute(QString appName)
                         fileOpenPid.close();
                     }
                 }
-            }
-            else{//si l'OS est windows
+            
+#elif defined Q_OS_WIN
                 listArg << str_tmp << "--interpreter=mi";
                 m_prog->start((*m_console));
                 m_prog->write(QByteArray(QString((*m_PATH)+tr(" ")+str_tmp+"\n").toLatin1()));
                 //on met le gdb en mode pascal
                 m_prog->write("set language pascal\n");
+#endif
                 emit writeBreakPoints();
+
             }
         }
     }

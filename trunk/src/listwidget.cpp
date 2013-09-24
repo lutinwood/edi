@@ -29,8 +29,11 @@ ListWidget::ListWidget(QWidget *parent) : QListWidget(parent)
 {
 	createMenu();
 	m_exitDisplay = NULL;
-        connect(this,SIGNAL(itemDoubleClicked(QListWidgetItem *)),parent,SLOT(itemDoubleClicked(QListWidgetItem *)));
-        connect(parent,SIGNAL(message(int)),this,SLOT(message(int)));
+        
+	connect(this,SIGNAL(itemDoubleClicked(QListWidgetItem *)),
+	parent,SLOT(itemDoubleClicked(QListWidgetItem *)));
+        
+	connect(parent,SIGNAL(message(int)),this,SLOT(message(int)));
 }
 
 //destructeur
@@ -96,7 +99,10 @@ void ListWidget::displayVector()
 {
     std::vector<erreur>::iterator it;
     for(it = m_listError.begin(); it != m_listError.end() ; it++)
-        cout << "(" << (*it).numLigneList << " , " << (*it).numLigneError << " , " << (*it).numPosError << " , " << (*it).numError << ")" << endl;
+        cout 	<< "(" << (*it).numLigneList 
+		<< " , " << (*it).numLigneError 
+		<< " , " << (*it).numPosError 
+		<< " , " << (*it).numError << ")" << endl;
 }
 
 int ListWidget::maxNumError()
@@ -221,8 +227,12 @@ void ListWidget::loadErrorList(QStringList strList)
     int numError = 0;
     for (it = strList.begin() ; it != strList.end() ; it++ , numLigneListe++)
     {
-        if ((*it).contains("Fatal",Qt::CaseInsensitive) || (*it).contains("Error",Qt::CaseInsensitive) || (*it).contains("Warning",Qt::CaseInsensitive))
-        {
+        if 	((*it).contains("Fatal",Qt::CaseInsensitive) 
+	|| 
+		(*it).contains("Error",Qt::CaseInsensitive) 
+	|| 
+		(*it).contains("Warning",Qt::CaseInsensitive))
+	{
             erreur e;
             e.numLigneList = numLigneListe;
             QString ch((*it).section('(', 1, 1));
@@ -280,15 +290,20 @@ void ListWidget::showShortMessage()
         QStringList::Iterator it;
         for (it = current.begin() ; it != current.end() ; it++)
         {
-            if ((*it).contains("Fatal",Qt::CaseInsensitive) || (*it).contains("Error",Qt::CaseInsensitive))
+            if 		((*it).contains("Fatal",Qt::CaseInsensitive) 
+		|| 
+			(*it).contains("Error",Qt::CaseInsensitive))
             {
                 if ((*it).contains("compilation aborted",Qt::CaseInsensitive) )
                     strList << QString("La compilation a échoué");
                 else if ((*it).contains("returned an error exitcode",Qt::CaseInsensitive)){}
                     else strList << (*it);
             }
-            if ((*it).contains("lines compiled",Qt::CaseInsensitive) || (*it).contains("line compiled",Qt::CaseInsensitive)  )
-                strList << QString("Compilation réussie");
+            if 		((*it).contains("lines compiled",Qt::CaseInsensitive) 
+		|| 
+			(*it).contains("line compiled",Qt::CaseInsensitive)  )
+                
+				strList << QString("Compilation réussie");
         }
         loadErrorList(strList);
         this->addItems(strList);
@@ -319,14 +334,22 @@ void ListWidget::showMediumMessage()
         QStringList::Iterator it;
         for (it = current.begin() ; it != current.end() ; it++)
         {
-            if ((*it).contains("Fatal",Qt::CaseInsensitive) || (*it).contains("Error",Qt::CaseInsensitive) || (*it).contains("Warning",Qt::CaseInsensitive) || (*it).contains("Compiling",Qt::CaseInsensitive))
+            if 		((*it).contains("Fatal",Qt::CaseInsensitive) 
+		|| 
+			(*it).contains("Error",Qt::CaseInsensitive) 
+		|| 
+			(*it).contains("Warning",Qt::CaseInsensitive) 
+		|| 
+			(*it).contains("Compiling",Qt::CaseInsensitive))
             {
                 if ((*it).contains("compilation aborted",Qt::CaseInsensitive) )
                     strList << QString("La compilation a échoué");
                 else if ((*it).contains("returned an error exitcode",Qt::CaseInsensitive)){}
                     else strList << (*it);
             }
-            if ((*it).contains("lines compiled",Qt::CaseInsensitive) || (*it).contains("line compiled",Qt::CaseInsensitive))
+            if 		((*it).contains("lines compiled",Qt::CaseInsensitive) 
+		|| 
+			(*it).contains("line compiled",Qt::CaseInsensitive))
             {
                 strList << (*it);
                 strList << QString("Compilation réussie");

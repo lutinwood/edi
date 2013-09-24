@@ -36,14 +36,14 @@ int main(int argc, char *argv[])
     app.installTranslator(&translator);
 
 	//app.setFont(QFont ("OpenSymbol", 12));
-	app.setFont(QFont ("Gothic", 18));
+	//app.setFont(QFont ("Gothic", 18));
     QSplashScreen splash(QPixmap(QString(":/images/splashscreen.png"),0,Qt::AutoColor),0);
     splash.show();
     MainWindow mainWin;
     mainWin.show();
     splash.finish(&mainWin);
-QFontDatabase database;
-foreach(QString fontname, database.families())
-    qDebug() << fontname;
+ //QFontDatabase database;
+//foreach(QString fontname, database.families())
+   // qDebug() << fontname;
     return app.exec();
 }

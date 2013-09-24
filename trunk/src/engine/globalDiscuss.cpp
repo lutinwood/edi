@@ -80,19 +80,16 @@ void GlobalDiscuss::loadConsole()
             {
                 QByteArray buffer(file.readLine());	
                 QString path(buffer);
-                if (m_OS)
-                {//si l'OS est windows
-                    if (path.contains("TERM_PATH_WIN32="))
+#if defined Q_OS_WIN               
+TERM_PATH = new QString("TERM_PATH_WIN32=");
+CONSOLE_PATH  = new QString("C:\\WINDOWS\\system32\\cmd.exe");
+#elif defined Q_OS_LINUX
+TERM_PATH = new QString("TERM_PATH_X11=");
+
+#endif
+                    if (path.contains(TERM_PATH))
                     {//si le path est trouvé
-                        QString ch(path.section("TERM_PATH_WIN32=",1,-1));
-                        consoleList = QStringList((ch.simplified()).split(","));
-                        find = true;
-                    }
-                }
-                else{//si l'OS est linux
-                    if (path.contains("TERM_PATH_X11="))
-                    {//si le path est trouvé
-                        QString ch(path.section("TERM_PATH_X11=",1,-1));
+                        QString ch(path.section(TERM_PATH,1,-1));
                         consoleList = QStringList((ch.simplified()).split(","));
                         find = true;
                     }
@@ -110,15 +107,16 @@ void GlobalDiscuss::loadConsole()
         }
         else {//le fichier de configuration n'existe pas
             //on charge alors les paramètres par défaut
-            if (m_OS)
-            {//si l'OS est windows
+#if defined Q_OS_WIN
                 QString console("C:\\WINDOWS\\system32\\cmd.exe");
                 if (QFile::exists(console))
                     m_console = new QString(console);
-            }
-            else{//si l'OS est linux
+            
+#elif defined Q_OS_LINUX
+
                 QStringList consoleList;
-                consoleList << "/usr/bin/konsole" << "/usr/bin/eterm" << "/usr/bin/xterm" << "/usr/bin/gnome-terminal";
+                consoleList 	<< "/usr/bin/konsole"	<< "/usr/bin/eterm" 
+				<< "/usr/bin/xterm" 	<< "/usr/bin/gnome-terminal";
                 //on teste maintenant si une des consoles est installée
                 QStringList::Iterator it;
                 for (it = consoleList.begin() ; it != consoleList.end() ; it++)
@@ -127,7 +125,7 @@ void GlobalDiscuss::loadConsole()
                         m_console = new QString((*it));
                 }
             }
-        }
+        
 }
 
 bool GlobalDiscuss::isRunning()

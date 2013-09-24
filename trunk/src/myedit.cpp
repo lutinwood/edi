@@ -44,15 +44,11 @@ void MyEdit::keyPressEvent ( QKeyEvent * event )
 {
 	if (event->key()==Qt::Key_Up)
 	{
-		//cout << "up" << endl;
 		clear();
-		//if (!m_listCmd->empty()) cout << "nb listCmd " << m_listCmd->count() << endl;
-		//cout << "m_nb "<< m_nb << endl;
 		if (m_nb>0) 
 		{
 			m_nb--;
 			setText(m_listCmd->at(m_nb));
-			//selectAll();
 		}
 		else if ((!m_listCmd->empty())&&(m_nb==0))
 		{
@@ -61,16 +57,11 @@ void MyEdit::keyPressEvent ( QKeyEvent * event )
 	}
 	else if (event->key()==Qt::Key_Down) 
 	{	
-		//cout << "down" << endl;
 		clear();
-		//if (!m_listCmd->empty()) cout << "nb listCmd " << m_listCmd->count() << endl;
-		//cout << "m_nb "<< m_nb << endl;
-		//if (!m_listCmd->empty())
 		if (m_listCmd->count()>(m_nb+1))
 		{	
 			m_nb++;		
 			setText(m_listCmd->at(m_nb));
-			//selectAll();
 		}
 	}
 	else
@@ -82,17 +73,7 @@ void MyEdit::keyPressEvent ( QKeyEvent * event )
 
 void MyEdit::enter(QString ch)
 {
-	//cout << "enter" << endl;
-	//cout << "ch " << ch.compare(tr("\n")) << endl;
-	/*if (ch.compare(tr("\n"))!=0)*/ m_listCmd->push_back(ch);
-// 	clear();
+	 m_listCmd->push_back(ch);
 	m_nb=m_listCmd->count();
-	/*cout << "m_nb "  << m_nb << endl;
-	cout << "m_listeCmd" << endl;
-	for (int i=0;i<m_listCmd->count();i++)
-	{
-		cout << m_listCmd->at(i).toStdString() << endl;
-	}
-        */
 }
 
