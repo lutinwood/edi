@@ -79,7 +79,7 @@ MainWindow::MainWindow()
     connect(this,SIGNAL(findNext()),this,SLOT(searchNext()));
     connect(m_compilerOutput, SIGNAL(itemClicked(QListWidgetItem *)),this, SLOT(itemDoubleClicked(QListWidgetItem *)));
     
-
+//    QString path;
     setCurrentFile("");
     m_textEdit->setFocus();
 
@@ -890,7 +890,7 @@ void MainWindow::initFileconf()
         file.write("--> Chemin menant au compilateur FPC sous Windows <--\n");
         file.write("FPC_PATH_WIN32=C:\\FPC\\2.1.4\\bin\\i386-win32\\fpc.exe\n");
         file.write("--> Arguments du compilateur FPC <--\n");
-        file.write("FPC_ARGS=-g\n");
+        file.write("FPC_ARGS=-g -Fr /usr/lib/fpc/2.6.0/msg/errorfr.msg \n");
         file.write("--> Chemin menant au débogueur GDB sous Linux <--\n");
         file.write("GDB_PATH_X11=/usr/bin/gdb\n");
         file.write("--> Chemin menant au compilateur GDB sous Windows <--\n");
@@ -1311,6 +1311,7 @@ void MainWindow::loadFile(const QString &fileName)
 
     setCurrentFile(fileName);
     statusBar()->showMessage(tr("Fichier chargé"), 2000);
+ //	path = QFileInfo(fileName).path();// stock le chemin de fichier du fichier sauvegarder
 }
 
 //Sauvegarde un fichier
@@ -1332,7 +1333,8 @@ bool MainWindow::saveFile(const QString &fileName)
 
     setCurrentFile(fileName);
     statusBar()->showMessage(tr("Fichier sauvegardé"), 2000);
-    return true;
+   // path = QFileInfo(fileName).path();// stock le chemin de fichier du fichier sauvegarder
+	return true;
 }
 
 //donne un nom au fichier courrant

@@ -69,17 +69,22 @@ SET(qt_include_dir /opt/QT_static/include/)
 MESSAGE(" INCLUDE FOLDER ${qt_include_dir}")
 include_directories(${qt_include_dir})
 link_directories(/opt/QT_static/lib)
+<<<<<<< HEAD
 	ADD_EXECUTABLE(LEP ${SRC} ${MOC_SRCS} ${RSRC} ${Moc_Eng} ${engine})
 	TARGET_LINK_LIBRARIES (LEP ${QSCINTILLA_LIBRARY} ${QT_LIBARIES} engine ${QT_QTEST_LIBRARY} QtGui QtTest QtCore pthread X11 xcb Xrender Xext rt)
+=======
+	ADD_EXECUTABLE(edi ${SRC} ${MOC_SRCS} ${RSRC} ${Moc_Eng} ${engine})
+	TARGET_LINK_LIBRARIES (edi ${QSCINTILLA_LIBRARY} ${QT_LIBARIES} engine ${QT_QTEST_LIBRARY} QtGui QtTest QtCore pthread X11 xcb Xrender Xext rt)
+>>>>>>> static
 ENDIF()
 
 IF(WINDOWS)
-	ADD_EXECUTABLE(lep.exe ${SRC} ${MOC_SRCS} ${RSRC} ${Moc_Eng} ${engine})
-	TARGET_LINK_LIBRARIES (lep.exe ${QSCINTILLA_LIBRARY} ${QT_LIBARIES} engine ${QT_QTEST_LIBRARY} QtTest)
+	ADD_EXECUTABLE(edi.exe ${SRC} ${MOC_SRCS} ${RSRC} ${Moc_Eng} ${engine})
+	TARGET_LINK_LIBRARIES (edi.exe ${QSCINTILLA_LIBRARY} ${QT_LIBARIES} engine ${QT_QTEST_LIBRARY} QtTest)
 ENDIF()
 
 #ADD_EXECUTABLE(LEP ${SRC} ${MOC_SRCS} ${RSRC} ${Moc_Eng} ${engine})
-INSTALL(PROGRAMS ../build/LEP DESTINATION sbin)
+INSTALL(PROGRAMS ../build/edi DESTINATION sbin)
 ###		LIBRARY
 ###		
 # Liaisons des librairies

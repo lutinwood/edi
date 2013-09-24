@@ -98,27 +98,17 @@ void ApplicationDiscuss::Execute(QString appName)
         connect(m_prog,SIGNAL( readyReadStandardOutput()),this,SLOT(writeOutputStream()));
         connect(m_prog,SIGNAL(started()),this,SLOT(started()));
         connect(m_prog,SIGNAL(finished(int,QProcess::ExitStatus)),this,SLOT(finished(int,QProcess::ExitStatus)));
-        //connect(m_prog,SIGNAL(error(QProcess::ProcessError)),this,SLOT(errorProcess( QProcess::ProcessError)));
-        //connect(m_prog,SIGNAL(stateChanged(QProcess::ProcessState)),this,SLOT(stateChanged (QProcess::ProcessState)));
         QStringList list;
         if (!m_OS)
         {//si l'OS est linux
-            list << "-e" << str_tmp ;
+            list << "-hold -e" << str_tmp ;
             m_prog->start((*m_console),list);
-            /*m_prog->start("/bin/bash");
-//             m_prog->write(QString(str_tmp+tr(" > /tmp/monexec_xxxxx\n")).toLatin1());
-            if ((*m_console).contains("konsole"))
-                    m_prog->write((tr("konsole -caption 'MonTitre' -e sh -c '")+str_tmp+tr(";trap INT QUIT TSTP; exec<&-; exec>&-; while :; do sleep 3600; done '\n")).toLatin1());
-            if ((*m_console).contains("gnome-terminal"))
-                    m_prog->write(((*m_console)+tr(" --command=\"sh -c '")+str_tmp+tr(";trap INT QUIT TSTP; exec<&-;exec>&-; while :;do sleep 3600;done'\"\n")).toLatin1());
-            if ((*m_console).contains("xterm"))
-                    m_prog->write((tr("xterm -e sh -c '")+str_tmp+tr("trap INT QUIT TSTP; exec<&-; exec>&-; while :; do sleep 3600; done '\n")).toLatin1());*/
         }
         else{//si l'OS est windows
             //on lance la console
             m_prog->start((*m_console));
             //puis on lance l'application avec start
-            m_prog->write(QString(tr("start /WAIT ")+str_tmp+tr("\n")).toLatin1());
+            m_prog->write(QString(tr("start /Q ")+str_tmp+tr("\n")).toLatin1());
             m_prog->write("exit\n");
         }
     }
