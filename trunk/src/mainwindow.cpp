@@ -77,7 +77,10 @@ MainWindow::MainWindow()
 
     connect(m_textEdit, SIGNAL(textChanged()),this, SLOT(documentWasModified()));
     connect(this,SIGNAL(findNext()),this,SLOT(searchNext()));
-    connect(m_compilerOutput, SIGNAL(itemClicked(QListWidgetItem *)),this, SLOT(itemDoubleClicked(QListWidgetItem *)));
+    connect(m_compilerOutput, 
+	SIGNAL(itemClicked(QListWidgetItem *)),
+		this, 
+	SLOT(itemDoubleClicked(QListWidgetItem *)));
     
 //    QString path;
     setCurrentFile("");
@@ -95,7 +98,8 @@ MainWindow::MainWindow()
     connect(m_debugNextAct,SIGNAL(triggered()),m_debug,SLOT(next()));
     connect(m_debugRunAct,SIGNAL(triggered()),m_debug,SLOT(run()));
     connect(this,SIGNAL(writeCmdDebug(QString)),m_debug,SLOT(writeCmd(QString)));
-    connect(this,SIGNAL(displayCompilerList(QString)),m_compilerOutput,SLOT(displayCompilerList(QString)));
+    connect(this,SIGNAL(displayCompilerList(QString)),
+	m_compilerOutput,SLOT(displayCompilerList(QString)));
     //affichage ou non du composant de débogue
     QFile file("conf.ini");
     if (file.exists())
@@ -147,12 +151,8 @@ void MainWindow::newFile()
 //ouverture d'un fichier
 void MainWindow::open()
 {
-    if (maybeSave()) {
-		#if defined(Q_OS_WIN)
-			QString fileName = QFileDialog::getOpenFileName(this,"Ouvrir un fichier","","Pascal (*.pas)");
-		#else
-			QString fileName = QFileDialog::getOpenFileName(this,"Ouvrir un fichier","","Pascal (*.pas)");
-		#endif
+    if (maybeSave()){ 
+	QString fileName = QFileDialog::getOpenFileName(this,"Ouvrir un fichier","","Pascal (*.pas)");	
         if (!fileName.isEmpty())
             loadFile(fileName);
     }
@@ -171,14 +171,13 @@ bool MainWindow::save()
 //sauvegarde d'un fichier à un emplacement choisit par l'utilisateur
 bool MainWindow::saveAs()
 {
-	#if defined(Q_OS_WIN)
-		QString fileName = QFileDialog::getSaveFileName(this,tr("Sauvegarder sous..."),"untitled.pas",tr("Pascal (*.pas)"));
-	#else 
-    	QString fileName = QFileDialog::getSaveFileName(this,tr("Sauvegarder sous..."),"untitled.pas",tr("Pascal (*.pas)"));
-	#endif
-	    if (fileName.isEmpty())
-        return false;
-    return saveFile(fileName);
+ QString fileName = QFileDialog::getSaveFileName(
+			this,tr("Sauvegarder sous..."),"untitled.pas",tr("Pascal (*.pas)"));
+	
+	if (fileName.isEmpty())
+        	return false;
+    
+	return saveFile(fileName);
 }
 
 //recherche d'une expression régulière dans le composant Scintilla
@@ -188,8 +187,16 @@ void MainWindow::find()
 	{
     	m_findDialog = new FindDialog(NULL);
 	m_findDialog->setModal(true);
-	connect(m_findDialog, SIGNAL(findNext(QString,Qt::CaseSensitivity)), this, SLOT(searchAfter(QString,Qt::CaseSensitivity)));
-    	connect(m_findDialog, SIGNAL(findPrevious(QString,Qt::CaseSensitivity)), this, SLOT(searchBefore(QString,Qt::CaseSensitivity)));
+
+	connect(m_findDialog, 
+		SIGNAL(findNext(QString,Qt::CaseSensitivity)), 
+		this, 
+		SLOT(searchAfter(QString,Qt::CaseSensitivity)));
+
+    	connect(m_findDialog, 
+		SIGNAL(findPrevious(QString,Qt::CaseSensitivity)), 
+		this, 
+		SLOT(searchBefore(QString,Qt::CaseSensitivity)));
 	}
 
      m_findDialog->show();
@@ -202,9 +209,21 @@ void MainWindow::replace()
 	{
     	m_replaceDialog = new ReplaceDialog(NULL);
 		m_replaceDialog->setModal(true);
-	connect(m_replaceDialog, SIGNAL(findNext(QString,Qt::CaseSensitivity)), this, SLOT(searchAfter(QString,Qt::CaseSensitivity)));
-    	connect(m_replaceDialog, SIGNAL(findPrevious(QString,Qt::CaseSensitivity)), this, SLOT(searchBefore(QString,Qt::CaseSensitivity)));
-	connect(m_replaceDialog,SIGNAL(replace(QString)),this,SLOT(replaceText(QString)));
+
+	connect(m_replaceDialog, 
+		SIGNAL(findNext(QString,Qt::CaseSensitivity)), 
+		this, 
+		SLOT(searchAfter(QString,Qt::CaseSensitivity)));
+    	
+	connect(m_replaceDialog, 
+		SIGNAL(findPrevious(QString,Qt::CaseSensitivity)), 
+		this, 
+		SLOT(searchBefore(QString,Qt::CaseSensitivity)));
+	
+	connect(m_replaceDialog,
+		SIGNAL(replace(QString)),
+		this,
+		SLOT(replaceText(QString)));
 	}
 
      m_replaceDialog->show();
@@ -223,8 +242,16 @@ void MainWindow::goLine()
 	{
     	m_lineDialog = new LineDialog(NULL);
 	m_lineDialog->setModal(true);
-	connect(m_lineDialog, SIGNAL(goTo(int,int)), m_textEdit, SLOT(setCursorPosition(int,int)));
-        connect(m_lineDialog, SIGNAL(warningNumber()), this, SLOT(warningLine()));
+	
+	connect(m_lineDialog, 
+		SIGNAL(goTo(int,int)), 
+		m_textEdit, 
+		SLOT(setCursorPosition(int,int)));
+	
+        connect(m_lineDialog, 
+		SIGNAL(warningNumber()), 
+		this, 
+		SLOT(warningLine()));
     	}
      m_lineDialog->show();
 }
@@ -240,16 +267,19 @@ void MainWindow::setting()
 //fenêtre à propos
 void MainWindow::about()
 {
-   QMessageBox::about(this, tr("A Propos"),
-            tr("Application crée par Vilayvanh MANIVONG et Julien COURCELLE au sein du département Informatique de l'Université d'Angers"));
+ QMessageBox::about(this, tr("A Propos"),
+	tr(	"Application crée par Vilayvanh MANIVONG \
+		et Julien COURCELLE au sein du département \
+		Informatique de l'Université d'Angers"));
 }
 
 //fenêtre d'aide
 void MainWindow::help()
 {
-    if (!m_helpWindow)
-        m_helpWindow = new HelpWindow(this);
-    m_helpWindow->show();
+	if (!m_helpWindow)
+        	m_helpWindow = new HelpWindow(this);
+   
+	 m_helpWindow->show();
 }
 
 //modification du composant Scintilla
@@ -343,7 +373,8 @@ void MainWindow::warningLine()
 {
  	m_lineDialog->setModal(false);
 	m_lineDialog->clear();
-	QMessageBox::warning(NULL,QObject::tr("attention"),QObject::tr("Veuillez entrer des nombres"));	
+	QMessageBox::warning(NULL,QObject::tr("attention"),
+		QObject::tr("Veuillez entrer des nombres"));	
 }
 
 //émission d'un message si une application n'est pas trouvée
@@ -365,7 +396,11 @@ void MainWindow::compile()
         {//si le fichier courrant est sauvegardé
             //on envoie le signal de compilation
             emit compile(m_curFile);
-            connect(m_compilerOutput,SIGNAL(showError(QListWidgetItem*)),this,SLOT(itemDoubleClicked(QListWidgetItem*)));
+           
+		 connect(m_compilerOutput,
+			SIGNAL(showError(QListWidgetItem*)),
+			this,
+			SLOT(itemDoubleClicked(QListWidgetItem*)));
         }
     }
 }
@@ -509,7 +544,11 @@ void MainWindow::displayDebug(QString str)
 void MainWindow::itemDoubleClicked ( QListWidgetItem * item )
 {
     QString str(item->text());
-    if (str.contains("Fatal",Qt::CaseInsensitive) || str.contains("Error",Qt::CaseInsensitive) || str.contains("Warning",Qt::CaseInsensitive))
+    if (	str.contains("Fatal",Qt::CaseInsensitive) 
+			|| 
+		str.contains("Error",Qt::CaseInsensitive) 
+			|| 
+		str.contains("Warning",Qt::CaseInsensitive))
     {
         QString ch(str.section('(', 1, 1));
         QString ch2(ch.section(',',0,0));
@@ -857,13 +896,15 @@ void MainWindow::initFileconf()
         file.open(QIODevice::WriteOnly);
 #if defined Q_OS_LINUX
         file.write("--> Chemin menant au compilateur FPC sous Linux <--\n");
+	//modifier par un appel system `which fpc` qui retourne le chemin de l'executable
         file.write("FPC_PATH_X11=/usr/bin/fpc\n");
 	file.write("--> Arguments du compilateur FPC <--\n");
-        file.write("FPC_ARGS=-g -Fr /usr/lib/fpc/2.6.0/msg/errorfr.msg \n");
+	// Modifier par un appel system `fpc -iV` retourne le numero de  la version de fpc 
+        file.write("FPC_ARGS=-g -Fr/usr/lib/fpc/2.4.4/msg/errorf.msg \n");
         file.write("--> Chemin menant au débogueur GDB sous Linux <--\n");
         file.write("GDB_PATH_X11=/usr/bin/gdb\n");
         file.write("--> Chemin menant aux différents terminaux sous Linux <--\n");
-        file.write("TERM_PATH_X11=/usr/bin/konsole,/usr/bin/gnome-terminal,/usr/bin/xterm\n");
+        file.write("TERM_PATH_X11=/usr/bin/konsole,/usr/bin/xterm,/usr/bin/gnome-terminal\n");
         file.write("--> Chemin du dossier contenant la documentation sous Linux <--\n");
         file.write("DOC_PATH_X11=~/.EDI/doc\n");
 

@@ -249,7 +249,7 @@ void ListWidget::loadErrorList(QStringList strList)
             m_listError.push_back(e);
         }
     }
-    displayVector();
+    //displayVector();
 }
 
 

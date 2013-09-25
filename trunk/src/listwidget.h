@@ -172,7 +172,7 @@ class ListWidget : public QListWidget
 	*/
 	void showError(QListWidgetItem*);
 
-        void itemDoubleClicked(QListWidgetItem * item);
+    //    void itemDoubleClicked(QListWidgetItem * item);
 };
 
 

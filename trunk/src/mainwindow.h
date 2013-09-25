@@ -36,6 +36,7 @@
 #include "settingwindow.h"
 #include "myedit.h"
 
+#define CONFIG_FILE "conf.ini"
 
 /**
 *  Fenêtre principale de l'application

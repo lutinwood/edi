@@ -81,7 +81,7 @@ class GdbDiscuss : public GlobalDiscuss
             /** Signal émis lorsque l'on veut afficher le flux de sortie standard **/
             void displayOutputStream(QString);
             /** Signal émis lorsque l'application n'a pas été trouvée sur l'ordinateur de l'utilisateur**/
-            void notFound(QString);
+          //  void notFound(QString);
             /** Signal émis lorsque le débogueur est prêt à recevoir les breakpoints **/
             void writeBreakPoints();
             /** Signal émis lorsque le débogueur est tué pour réinsérer des break points **/
