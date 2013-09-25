@@ -49,35 +49,48 @@ SettingWindow::SettingWindow(QWidget * parent, Qt::WFlags f) : QMainWindow(paren
     connect (m_defaultSettingButton,SIGNAL(clicked()),this,SLOT(loadDefaultSetting()));
     connect(m_okButton,SIGNAL(clicked()),this,SLOT(saveFile()));
     connect(m_debugOption,SIGNAL(clicked(bool)),parent,SLOT(setDebugActivated(bool)));
+
+
 }
 
 //destructeur
 SettingWindow::~SettingWindow(){}
 
-//slots
-void SettingWindow::loadFile()
+void SettingWindow::setPath()
 {
-    if (QFile::exists(QString("conf.ini"))) 
-    {
-        QFile *file = new QFile(QString("conf.ini"));
-        file->open(QIODevice::ReadOnly);
 #if define Q_OS_LINUX
-FPC_PATH = new QString("FPC_PATH_X11=");
-GDB_PATH = new QString("GDB_PATH_X11=");
-DOC_PATH = new QString("DOC_PATH_X11=");
+QString FPC_PATH = "FPC_PATH_X11=";
+QString GDB_PATH = "GDB_PATH_X11=";
+QString DOC_PATH = "DOC_PATH_X11=";
 #elif Q_OS_WIN32
 FPC_PATH = new QString("FPC_PATH_WIN32=");
 GDB_PATH = new QString("GDB_PATH_WIN32=");
 DOC_PATH = new QString("DOC_PATH_WNI32=");
 
 #endif
- QString fpcPath;
-    QString gdbPath;
-    QString docPath;
-    QString docIndex;
+
+}
+
+//slots
+void SettingWindow::loadFile()
+{
+//SettingWindow::setPath;
+    if (QFile::exists(QString("conf.ini"))) 
+    {
+        QFile *file = new QFile(QString("conf.ini"));
+        file->open(QIODevice::ReadOnly);
+ 
+	QString fpcPath;
+    	QString gdbPath;
+    	QString docPath;
+    	QString docIndex;
      
        while (!file->atEnd())
             {
+		QString FPC_PATH = "FPC_PATH_X11=";
+QString GDB_PATH = "GDB_PATH_X11=";
+QString DOC_PATH = "DOC_PATH_X11=";
+
                 QByteArray buffer(file->readLine());	
                 QString path(buffer);
                 if (path.contains(FPC_PATH))
@@ -101,7 +114,7 @@ DOC_PATH = new QString("DOC_PATH_WNI32=");
                 if (path.contains("DOC_INDEX="))
                 {
                     QString ch(path.section("DOC_INDEX=",1,-1));
-                    m_docIndextmp->setText(ch.simplified()); 
+                    m_docIndextemp->setText(ch.simplified()); 
 		docIndex = QString((m_docIndextemp->text()).simplified());
                 }
                 if (path.contains("FPC_ARGS="))
@@ -126,6 +139,8 @@ DOC_PATH = new QString("DOC_PATH_WNI32=");
 
 void SettingWindow::saveFile()
 {
+//setPath;
+
     QString debug;
     if (m_debugOption->isChecked())
         debug = QString("1");
@@ -186,6 +201,16 @@ void SettingWindow::saveFile()
     //on sauvegarde après les préférences dans le fichier de configuration
     if (QFile::exists("conf.ini"))
     {
+
+        QString fpcPath;
+        QString gdbPath;
+        QString docPath;
+        QString docIndex;
+
+	QString FPC_PATH = "FPC_PATH_X11=";
+QString GDB_PATH = "GDB_PATH_X11=";
+QString DOC_PATH = "DOC_PATH_X11=";
+
         QFile file("conf.ini");
         file.open(QIODevice::ReadWrite);
         QByteArray buffer(file.readAll());
@@ -405,56 +430,71 @@ void SettingWindow::createCompilerWidget()
 
 void SettingWindow::createPathWidget()
 {
+
     m_pathWidget = new QWidget(this);
     QVBoxLayout *globalLayout = new QVBoxLayout(m_pathWidget);
-    m_fpcPathX11 = new QLineEdit(this);
-    QLabel *fpcX11Label = new QLabel("Chemin de fpc pour Linux : ", this);
-    m_fpcPathWIN32 = new QLineEdit(this);
+
+
+#if defined Q_OS_LINUX
+    m_fpcPathtemp = new QLineEdit(this);
+    QLabel *fpctempLabel = new QLabel("Chemin de fpc pour Linux : ", this);
+	
+    m_gdbPathtemp = new QLineEdit(this);
+    QLabel *gdbtempLabel = new QLabel("Chemin de gdb pour Linux  : ", this);
+
+    m_docPathtemp = new QLineEdit(this);
+    QLabel *doctempLabel = new QLabel("Chemin de la documentation sous Linux : ", this);
+
+    m_docIndextemp = new QLineEdit(this);
+    QLabel *doctempIndexLabel = new QLabel("Nom du fichier index de la documentation : ", this);
+
+#elif defined Q_OS_WIN32
+    m_fpcPathtemp = new QLineEdit(this);
     QLabel *fpcWIN32Label = new QLabel("Chemin de fpc pour Windows: ", this);
-    m_gdbPathX11 = new QLineEdit(this);
-    QLabel *gdbX11Label = new QLabel("Chemin de gdb pour Linux  : ", this);
-    m_gdbPathWIN32 = new QLineEdit(this);
+
+    m_gdbPathtemp = new QLineEdit(this);
     QLabel *gdbWIN32Label = new QLabel("Chemin de gdb pour Windows : ", this);
-    m_docPathX11 = new QLineEdit(this);
-    QLabel *docX11Label = new QLabel("Chemin de la documentation sous Linux : ", this);
-    m_docPathWIN32 = new QLineEdit(this);
+    
+    m_docPathtemp = new QLineEdit(this);
     QLabel *docWIN32Label = new QLabel("Chemin de la documentation sous Windows : ", this);
-    m_docIndexX11 = new QLineEdit(this);
-    QLabel *docX11IndexLabel = new QLabel("Nom du fichier index de la documentation : ", this);
-    m_docIndexWIN32 = new QLineEdit(this);
+
+    m_docIndextemp = new QLineEdit(this);
     QLabel *docWIN32IndexLabel = new QLabel("Nom du fichier index de la documentation : ", this);
+#endif
+
+
+
     QGroupBox *pathGrBox = new QGroupBox(tr("Chemins des applications"),m_pathWidget);
     QGridLayout *pathLayout = new QGridLayout;
-    pathLayout->addWidget(fpcX11Label,0,0);
-    pathLayout->addWidget(m_fpcPathX11,0,1);
+
+#if defined Q_OS_LINUX
+    pathLayout->addWidget(fpctempLabel,0,0);
+    pathLayout->addWidget(m_fpcPathtemp,0,1);
+    pathLayout->addWidget(gdbtempLabel,2,0);
+    pathLayout->addWidget(m_gdbPathtemp,2,1);
+    pathLayout->addWidget(doctempLabel,4,0);
+    pathLayout->addWidget(m_docPathtemp,4,1);
+    pathLayout->addWidget(doctempIndexLabel,6,0);
+    pathLayout->addWidget(m_docIndextemp,6,1);
+
+        fpctempLabel->setDisabled(true);
+        m_fpcPathtemp->setDisabled(true);
+        gdbtempLabel->setDisabled(true);
+        m_gdbPathtemp->setDisabled(true);
+        doctempLabel->setDisabled(true);
+        m_docPathtemp->setDisabled(true);
+        doctempIndexLabel->setDisabled(true);
+        m_docIndextemp->setDisabled(true);
+#elif defined Q_OS_WIN32
     pathLayout->addWidget(fpcWIN32Label,1,0);
     pathLayout->addWidget(m_fpcPathWIN32,1,1);
-    pathLayout->addWidget(gdbX11Label,2,0);
-    pathLayout->addWidget(m_gdbPathX11,2,1);
     pathLayout->addWidget(gdbWIN32Label,3,0);
     pathLayout->addWidget(m_gdbPathWIN32,3,1);
-    pathLayout->addWidget(docX11Label,4,0);
-    pathLayout->addWidget(m_docPathX11,4,1);
     pathLayout->addWidget(docWIN32Label,5,0);
     pathLayout->addWidget(m_docPathWIN32,5,1);
-    pathLayout->addWidget(docX11IndexLabel,6,0);
-    pathLayout->addWidget(m_docIndexX11,6,1);
     pathLayout->addWidget(docWIN32IndexLabel,7,0);
     pathLayout->addWidget(m_docIndexWIN32,7,1);
-    pathGrBox->setLayout(pathLayout);
-    globalLayout->addWidget(pathGrBox);
-    if (m_OS)
-    {
-        fpcX11Label->setDisabled(true);
-        m_fpcPathX11->setDisabled(true);
-        gdbX11Label->setDisabled(true);
-        m_gdbPathX11->setDisabled(true);
-        docX11Label->setDisabled(true);
-        m_docPathX11->setDisabled(true);
-        docX11IndexLabel->setDisabled(true);
-        m_docIndexX11->setDisabled(true);
-    }
-    else{
+
         fpcWIN32Label->setDisabled(true);
         m_fpcPathWIN32->setDisabled(true);
         gdbWIN32Label->setDisabled(true);
@@ -463,7 +503,10 @@ void SettingWindow::createPathWidget()
         m_docPathWIN32->setDisabled(true);
         docWIN32IndexLabel->setDisabled(true);
         m_docIndexWIN32->setDisabled(true);
-    }
+
+#endif
+    pathGrBox->setLayout(pathLayout);
+    globalLayout->addWidget(pathGrBox);
 }
 
 void SettingWindow::createAdvanceWidget()

@@ -84,7 +84,7 @@ void GlobalDiscuss::loadConsole()
 TERM_PATH = new QString("TERM_PATH_WIN32=");
 CONSOLE_PATH  = new QString("C:\\WINDOWS\\system32\\cmd.exe");
 #elif defined Q_OS_LINUX
-TERM_PATH = new QString("TERM_PATH_X11=");
+QString TERM_PATH = "TERM_PATH_X11=";
 
 #endif
                     if (path.contains(TERM_PATH))
@@ -94,7 +94,7 @@ TERM_PATH = new QString("TERM_PATH_X11=");
                         find = true;
                     }
                 }
-            }
+            
             file.close();
             //fin de la recherche dans le fichier de configuration
             //on teste maintenant si une des consoles est installée
@@ -115,8 +115,8 @@ TERM_PATH = new QString("TERM_PATH_X11=");
 #elif defined Q_OS_LINUX
 
                 QStringList consoleList;
-                consoleList 	<< "/usr/bin/konsole"	<< "/usr/bin/eterm" 
-				<< "/usr/bin/xterm" 	<< "/usr/bin/gnome-terminal";
+                consoleList 	<< "/usr/bin/konsole"	<< "/usr/bin/gnome-terminal" 
+				<< "/usr/bin/gnome-eterm" 	<< "/usr/bin/xterm";
                 //on teste maintenant si une des consoles est installée
                 QStringList::Iterator it;
                 for (it = consoleList.begin() ; it != consoleList.end() ; it++)
@@ -124,6 +124,7 @@ TERM_PATH = new QString("TERM_PATH_X11=");
                     if (QFile::exists((*it)))
                         m_console = new QString((*it));
                 }
+#endif
             }
         
 }

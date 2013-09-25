@@ -33,8 +33,11 @@ class SettingWindow : public QMainWindow
     Q_OBJECT
 
     public slots:
-        /**
-        * Méthode qui charge les options enregistrées dans le fichier de configuration
+        /*
+
+	*/
+	void setPath();
+        /* Méthode qui charge les options enregistrées dans le fichier de configuration
         **/
         void loadFile();
         /**
@@ -104,6 +107,12 @@ class SettingWindow : public QMainWindow
         QLineEdit *m_docPathWIN32;
         QLineEdit *m_docIndexX11;
         QLineEdit *m_docIndexWIN32;
+
+	QLineEdit *m_fpcPathtemp;
+	QLineEdit *m_gdbPathtemp;
+	QLineEdit *m_docPathtemp;
+	QLineEdit *m_docIndextemp;
+	
         //options avancées
         QCheckBox *m_vwOption;
         QCheckBox *m_vnOption;

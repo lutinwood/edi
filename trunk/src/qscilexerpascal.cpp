@@ -28,7 +28,6 @@ QsciLexerPascal::QsciLexerPascal(QObject *parent,bool caseInSensitiveKeyWords)
 {
 }
 
-
 // destructeur
 QsciLexerPascal::~QsciLexerPascal()
 {
@@ -48,14 +47,31 @@ const char *QsciLexerPascal::keywords(int set) const
     if (set != 1)
         return 0;
 
-    return "absolute abstract alias all and and_then array as asm asmname assembler attribute \
-	begin bindable break case cdecl class const contructor continue cppclass cvar default destructor \
-	dispose div do downto dynamic else end end. except exit exports external fail false far file finalization \
-	finally for forward function goto if implementation import in index inherited initialization inline interface \
-	internconst interrupt iocheck is label library message mod module name near new nil nodefault not object \
-	of on only openstring operator or or_else otherwise out overlay overload override packed pascal popstack \
-	pow private procedure process program property protected public published qualified raise read record \
-	register reintroduce repeat resident resourcestring restricted result safecall saveregisters segment self \
-	separate set shl shortstring shr static stdcall stored string syscall system then threadvar to true try type \
-	unit univ until uses value var view virutal volatile while with write xor";
+    return "\
+		absolute abstract alias all and and_then array as asm asmname assembler attribute \
+		begin bindable break \
+		case cdecl class const contructor continue cppclass cvar \
+		default destructor dispose div do downto dynamic \
+		else end end. except exit exports external \
+		fail false far file finalization finally for forward function \
+		goto \
+		if implementation import in index inherited initialization inline interface \
+		internconst interrupt iocheck is \
+		label library \
+		message mod module \
+		name near new nil nodefault not \
+		object of on only openstring operator or \
+		or_else otherwise out overlay overload override \
+		packed pascal popstack pow private procedure process \
+		program property protected public published \
+		qualified \
+		raise read readln  record register reintroduce repeat \
+		resident resourcestring restricted result \
+		safecall saveregisters segment self separate set \
+		shl shortstring shr static stdcall stored string syscall system \
+		then threadvar to true try type \
+		unit univ until uses \
+		value var view virutal volatile \
+		while with write \
+		xor";
 }

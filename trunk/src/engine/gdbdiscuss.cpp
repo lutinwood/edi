@@ -63,9 +63,9 @@ void GdbDiscuss::FileConf()
         QFile *file = new QFile(QString("conf.ini"));
         file->open(QIODevice::ReadOnly);
 #if defined Q_OS_LINUX
-      QString gdb_path = new QString("GDB_PATH_X11=");
+      QString  gdb_path = "GDB_PATH_X11=";
 #elif defined Q_OS_WIN
-      QString gdb_path = new QString("GDB_PATH_WIN32=");
+      gdb_path = new QString("GDB_PATH_WIN32=");
 #endif
             while (!file->atEnd() && !find)
             {
@@ -78,7 +78,7 @@ void GdbDiscuss::FileConf()
                     find = true;
                 }
             }
-        }
+        
         file->close();
     }
     else {//si le fichier de config n'existe pas, path définit par défaut
@@ -137,11 +137,22 @@ void GdbDiscuss::Execute(QString appName)
         m_prog = new QProcess(this);
             if (m_terminal == NULL)
                 m_terminal = new QProcess(this);
-        connect(m_prog,SIGNAL( readyReadStandardError()),this,SLOT(writeErrorStream()));
-        connect(m_prog,SIGNAL( readyReadStandardOutput()),this,SLOT(writeOutputStream()));
-        connect(m_prog,SIGNAL(finished(int,QProcess::ExitStatus)),this,SLOT(finished(int,QProcess::ExitStatus)));
-        connect(m_prog,SIGNAL(started()),this,SLOT(started()));
-        connect(m_prog,SIGNAL(bytesWritten(qint64)),this,SLOT(send(qint64)));
+       
+	 connect(m_prog,
+		SIGNAL( readyReadStandardError()),
+		this,SLOT(writeErrorStream()));
+        connect(m_prog,
+		SIGNAL( readyReadStandardOutput()),
+		this,SLOT(writeOutputStream()));
+        connect(m_prog,
+		SIGNAL(finished(int,QProcess::ExitStatus)),
+		this,SLOT(finished(int,QProcess::ExitStatus)));
+        connect(m_prog,
+		SIGNAL(started()),
+		this,SLOT(started()));
+        connect(m_prog,
+		SIGNAL(bytesWritten(qint64)),
+		this,SLOT(send(qint64)));
         if (appName!="")
         {
             emit setDebugEnabled(true);
@@ -168,15 +179,29 @@ void GdbDiscuss::Execute(QString appName)
                 cout << "pid : " << m_terminal->pid() << endl;
                 cout << (*m_console).toStdString() << endl;
                 if ((*m_console).contains("konsole"))
-                    m_terminal->write((tr("konsole -caption 'Terminal' -e sh -c 'tty >> /tmp/montty_xxxxx; ps >> /tmp/monpid_xxxxx; trap INT QUIT TSTP; exec<&-; exec>&-; while :; do sleep 3600; done '\n")).toLatin1());
+                    m_terminal->write((tr(	
+		"konsole -caption 'Terminal' -e sh -c\
+		'tty >> /tmp/montty_xxxxx; ps >> /tmp/monpid_xxxxx;\
+		 trap INT QUIT TSTP; exec<&-; exec>&-; while :; do sleep 3600;\
+		 done '\n")).toLatin1());
+	
                 if ((*m_console).contains("gnome-terminal"))
-                    m_terminal->write(((*m_console)+tr(" --command=\"sh -c 'tty >> /tmp/montty_xxxxx; ps >> /tmp/monpid_xxxxx; trap INT QUIT TSTP; exec<&-;exec>&-; while :;do sleep 3600;done'\"\n")).toLatin1());
+                    m_terminal->write(((*m_console)+tr(
+		" --command=\"sh -c 'tty >> /tmp/montty_xxxxx; ps >> /tmp/monpid_xxxxx;\
+		 trap INT QUIT TSTP; exec<&-;exec>&-; while :;do sleep 3600;\
+		done'\"\n")).toLatin1());
+	
                 if ((*m_console).contains("xterm"))
-                    m_terminal->write((tr("xterm -e sh -c 'tty >> /tmp/montty_xxxxx; ps >> /tmp/monpid_xxxxx; trap INT QUIT TSTP; exec<&-; exec>&-; while :; do sleep 3600; done '\n")).toLatin1());
+                    m_terminal->write((tr(
+		"xterm -e sh -c 'tty >> /tmp/montty_xxxxx; \
+		ps >> /tmp/monpid_xxxxx; trap INT QUIT TSTP; exec<&-; exec>&-; while :; \
+		do sleep 3600; done '\n")).toLatin1());
             
-                    int i = 0;
-                    while (!QFile::exists("/tmp/montty_xxxxx") && !QFile::exists("/tmp/monpid_xxxxx") && i++ < 8)
-                        QTest::qWait(500);
+                int i = 0;
+                    while (!QFile::exists("/tmp/montty_xxxxx") 
+			&& !QFile::exists("/tmp/monpid_xxxxx") && i++ < 8)
+                        
+			QTest::qWait(500);
                 
                 //on récupère le tty de la commande lancée
                 if (QFile::exists("/tmp/montty_xxxxx"))
@@ -205,7 +230,8 @@ void GdbDiscuss::Execute(QString appName)
                         fileOpenPid.open(QIODevice::ReadOnly);
                         fileOpenPid.waitForReadyRead(3000);
                         fileOpenPid.readLine();
-                        str = QString(((QString(fileOpenPid.readLine())).simplified()).section("pts",0,0));
+                        str = QString(((
+			QString(fileOpenPid.readLine())).simplified()).section("pts",0,0));
                         bool ok;
                         m_childPid = (str.simplified()).toInt(&ok,10);
 //                         cout << "pid fils : " << str.toStdString() << endl;
@@ -216,13 +242,14 @@ void GdbDiscuss::Execute(QString appName)
 #elif defined Q_OS_WIN
                 listArg << str_tmp << "--interpreter=mi";
                 m_prog->start((*m_console));
-                m_prog->write(QByteArray(QString((*m_PATH)+tr(" ")+str_tmp+"\n").toLatin1()));
+                m_prog->write(QByteArray(
+			QString((*m_PATH)+tr(" ")+str_tmp+"\n").toLatin1()));
                 //on met le gdb en mode pascal
                 m_prog->write("set language pascal\n");
 #endif
                 emit writeBreakPoints();
 
-            }
+            
         }
     }
 }
@@ -259,10 +286,11 @@ void GdbDiscuss::stateChanged ( QProcess::ProcessState newState )
             kill();
             break;
     }
-    if (m_OutputStream == NULL)
+    if (m_OutputStream == NULL){
         m_OutputStream = new QString(str);
-    else (*m_OutputStream) += str;
-    emit displayOutputStream(*m_OutputStream);
+    }else {(*m_OutputStream) += str;
+    }
+	emit displayOutputStream(*m_OutputStream);
 }
 
 
@@ -271,9 +299,11 @@ void GdbDiscuss::finished ( int exitCode, QProcess::ExitStatus exitStatus)
     kill();
     QString str("Fin de l'application.");
 //     str += exitCode;
-    if (m_OutputStream == NULL)
-        m_OutputStream = new QString(str);
-    else (*m_OutputStream) += str;
+    if (m_OutputStream == NULL){
+        	m_OutputStream = new QString(str);
+    }else{
+ 		(*m_OutputStream) += str;
+	}
     emit displayOutputStream(*m_OutputStream);
     emit connectBreakPoints();
     emit setDebugEnabled(false);
@@ -315,8 +345,6 @@ void GdbDiscuss::kill()
     #endif
     if (m_prog != NULL)
     {
-        //m_prog->write("C^\n");
-        //m_prog->waitForReadyRead(3000);
         m_prog->kill();
         m_prog->waitForFinished(3000);
         delete m_prog;

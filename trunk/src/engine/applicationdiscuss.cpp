@@ -83,7 +83,7 @@ void ApplicationDiscuss::writeOutputStream()
 void ApplicationDiscuss::Execute(QString appName)
 {
     if (m_console != NULL)
-    {//si une console existe on lanse l'application
+    {//si une console existe on lance l'application
         emit setApplicationEnabled(true);
         //on récupère la chaîne sans le .pas
         QString str_tmp(appName.leftJustified(appName.length()-4,'.',true));
@@ -103,7 +103,8 @@ void ApplicationDiscuss::Execute(QString appName)
         QStringList list;  
       
 #if defined(__linux__)
-            list << "-hold -e" << str_tmp ;
+	
+            list << "-e" << str_tmp ;
             m_prog->start((*m_console),list);
 #elif defined(_Win32)
             m_prog->start((*m_console));
@@ -116,9 +117,9 @@ void ApplicationDiscuss::Execute(QString appName)
 
 void ApplicationDiscuss::displayOutputStream(int exitCode, QProcess::ExitStatus exitStatus )
 {
-    QStringList str(m_OutputStream->split("\n"));
+   // QStringList str(m_OutputStream->split("\n"));
 
-    emit displayStream(str);//debug
+    //emit displayStream(str);//debug
 }
 
 void ApplicationDiscuss::errorProcess(QProcess::ProcessError error)
