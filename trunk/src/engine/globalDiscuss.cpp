@@ -72,9 +72,9 @@ void GlobalDiscuss::loadConsole()
         bool find = false;
         QStringList consoleList;
         //on regarde si le fichier de configuration est présent sur la machine
-        if (QFile::exists("conf.ini"))
+        if (QFile::exists(CONFIG_FILE))
         {
-            QFile file("conf.ini");
+            QFile file(CONFIG_FILE);
             file.open(QIODevice::ReadOnly);
             while (!file.atEnd() && !find)
             {

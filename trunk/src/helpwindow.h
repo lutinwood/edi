@@ -22,6 +22,7 @@
 #include <QtGui>
 #include <QtCore>
 
+#define CONFIG_FILE "conf.ini"
 /**
 *Classe permettant l'affichage d'une fenêtre d'aide.
 *@author MANIVONG Vilayvanh & COURCELLE Julien 

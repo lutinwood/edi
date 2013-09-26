@@ -52,9 +52,9 @@ HelpWindow::HelpWindow(QWidget * parent, Qt::WFlags f) : QMainWindow(parent, f)
 	m_textBrowser = new QTextBrowser(this);
 	//recherche du path pour la doc
         QStringList listPath;
-        if (QFile::exists(QString("conf.ini"))) 
+        if (QFile::exists(QString(CONFIG_FILE))) 
         {
-           QFile *file = new QFile(QString("conf.ini"));
+           QFile *file = new QFile(QString(CONFIG_FILE));
             file->open(QIODevice::ReadOnly);
 
 #if defined Q_OS_LINUX

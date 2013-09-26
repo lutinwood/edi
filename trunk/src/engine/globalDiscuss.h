@@ -22,6 +22,8 @@
 #include <QtGui>
 #include <QtCore>
 
+#define CONFIG_FILE "conf.ini"
+
 /**
 *Classe abstraite permettant à l'interface et à un programme extèrieur de dialoguer
 */

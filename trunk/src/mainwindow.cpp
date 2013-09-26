@@ -40,9 +40,12 @@ MainWindow::MainWindow()
     m_settingWindow = NULL;
 
     m_compilerOutput = new ListWidget(this);
-    connect(m_compilerOutput, SIGNAL(getShortMessage()), this, SLOT(shortMessageShow()) );
-    connect(m_compilerOutput, SIGNAL(getMediumMessage()), this, SLOT(mediumMessageShow()) );
-    connect(m_compilerOutput, SIGNAL(getLongMessage()), this, SLOT(longMessageShow()) ); 
+    connect(m_compilerOutput,
+            SIGNAL(getShortMessage()), this, SLOT(shortMessageShow()) );
+    connect(m_compilerOutput,
+            SIGNAL(getMediumMessage()), this, SLOT(mediumMessageShow()) );
+    connect(m_compilerOutput,
+            SIGNAL(getLongMessage()), this, SLOT(longMessageShow()) );
 
     createActions();
     createMenus();
@@ -75,8 +78,10 @@ MainWindow::MainWindow()
 
     readSettings();
 
-    connect(m_textEdit, SIGNAL(textChanged()),this, SLOT(documentWasModified()));
-    connect(this,SIGNAL(findNext()),this,SLOT(searchNext()));
+    connect(m_textEdit,
+            SIGNAL(textChanged()),this, SLOT(documentWasModified()));
+    connect(this,
+            SIGNAL(findNext()),this,SLOT(searchNext()));
     connect(m_compilerOutput, 
 	SIGNAL(itemClicked(QListWidgetItem *)),
 		this, 
@@ -101,7 +106,7 @@ MainWindow::MainWindow()
     connect(this,SIGNAL(displayCompilerList(QString)),
 	m_compilerOutput,SLOT(displayCompilerList(QString)));
     //affichage ou non du composant de débogue
-    QFile file("conf.ini");
+    QFile file(CONFIG_FILE);
     if (file.exists())
     {
         file.open(QIODevice::ReadOnly);
@@ -152,7 +157,15 @@ void MainWindow::newFile()
 void MainWindow::open()
 {
     if (maybeSave()){ 
-	QString fileName = QFileDialog::getOpenFileName(this,"Ouvrir un fichier","","Pascal (*.pas)");	
+#if defined Q_OS_LINUX
+    QString fileName =
+            QFileDialog::getOpenFileName(
+                this,tr("Ouvrir un fichier"),QDir::homePath()+"/Bureau","Pascal (*.pas)");
+#elif defined Q_OS_WIN
+        QString fileName =
+                QFileDialog::getOpenFileName(
+                    this,"Ouvrir un fichier","","Pascal (*.pas)");
+#endif
         if (!fileName.isEmpty())
             loadFile(fileName);
     }
@@ -889,9 +902,9 @@ void MainWindow::setDebugActivated(bool b)
 
 void MainWindow::initFileconf()
 {
-    if (!QFile::exists("conf.ini"))
+    if (!QFile::exists(CONFIG_FILE))
     {
-        QFile file("conf.ini");
+        QFile file(CONFIG_FILE);
 
         file.open(QIODevice::WriteOnly);
 #if defined Q_OS_LINUX
@@ -932,9 +945,15 @@ void MainWindow::initFileconf()
 void MainWindow::initScintilla()
 {
     m_textEdit = new QsciScintilla;
+    //création de la police
+    //QFont myfont = app.font();
+    m_textEdit->setFont(QFont ("Newspaper",18,18));
+    QFontInfo myinfo = m_textEdit->fontInfo();
+    qDebug() << myinfo.family();
+    qDebug() << myinfo.rawMode();
     //création de la marge avec les numéros de lignes
     m_textEdit->setMarginLineNumbers(0,true);
-    //création d'un marge à  droite
+    //création d'un marge à  droite
     m_textEdit->setMarginWidth(0,40);
     //on sensibilise la marge de gauche
     m_textEdit->setMarginSensitivity(1,true);
@@ -1001,7 +1020,7 @@ void MainWindow::createActions()
     connect(m_pasteAct, SIGNAL(triggered()), m_textEdit, SLOT(paste()));
 
     m_aboutAct = new QAction(QIcon(":/images/info.png"),tr("A &Propos"), this);
-    m_aboutAct->setStatusTip(tr("Montre la fenêtre à  propos"));
+    m_aboutAct->setStatusTip(tr("Montre la fenêtre à  propos"));
     connect(m_aboutAct, SIGNAL(triggered()), this, SLOT(about()));
 
     m_aboutQtAct = new QAction(QIcon(":/images/info.png"),tr("A Propos de &Qt"), this);
@@ -1048,9 +1067,9 @@ void MainWindow::createActions()
     m_removeAct->setStatusTip(tr("Supprimer"));
     connect(m_removeAct,SIGNAL(triggered()),m_textEdit,SLOT(removeSelectedText()));
 
-    m_lineAct = new QAction(QIcon(":/images/go-to-line.png"),tr("&Aller à "),this);
+    m_lineAct = new QAction(QIcon(":/images/go-to-line.png"),tr("&Aller à "),this);
     m_lineAct->setShortcut(tr("Ctrl+G"));
-    m_lineAct->setStatusTip(tr("Aller à "));
+    m_lineAct->setStatusTip(tr("Aller à "));
     connect(m_lineAct,SIGNAL(triggered()),this,SLOT(goLine()));
 
     m_selectAllAct = new QAction(QIcon(":/images/select-all.png"),tr("Sélectionner &tout"),this);

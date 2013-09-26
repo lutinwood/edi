@@ -75,9 +75,9 @@ DOC_PATH = new QString("DOC_PATH_WNI32=");
 void SettingWindow::loadFile()
 {
 //SettingWindow::setPath;
-    if (QFile::exists(QString("conf.ini"))) 
+    if (QFile::exists(QString(CONFIG_FILE))) 
     {
-        QFile *file = new QFile(QString("conf.ini"));
+        QFile *file = new QFile(QString(CONFIG_FILE));
         file->open(QIODevice::ReadOnly);
  
 	QString fpcPath;
@@ -199,7 +199,7 @@ void SettingWindow::saveFile()
     if (m_OgOption->isChecked())
         (*m_args) << "-Og";
     //on sauvegarde après les préférences dans le fichier de configuration
-    if (QFile::exists("conf.ini"))
+    if (QFile::exists(CONFIG_FILE))
     {
 
         QString fpcPath;
@@ -211,7 +211,7 @@ void SettingWindow::saveFile()
 QString GDB_PATH = "GDB_PATH_X11=";
 QString DOC_PATH = "DOC_PATH_X11=";
 
-        QFile file("conf.ini");
+        QFile file(CONFIG_FILE);
         file.open(QIODevice::ReadWrite);
         QByteArray buffer(file.readAll());
         QString str(buffer);
@@ -251,7 +251,7 @@ QString DOC_PATH = "DOC_PATH_X11=";
             }
         
         file.remove();
-        QFile file2("conf.ini");
+        QFile file2(CONFIG_FILE);
         file2.open(QIODevice::WriteOnly);
         file2.write((file_list.join("\n")).toLatin1());
         file2.close();
@@ -361,7 +361,7 @@ void SettingWindow::loadCheckOption()
 void SettingWindow::cancel()
 {
     this->loadCheckOption();
-    QFile file("conf.ini");
+    QFile file(CONFIG_FILE);
     if (file.exists())
     {
         file.open(QIODevice::ReadOnly);

@@ -58,9 +58,9 @@ bool GdbDiscuss::Exist(){return QFile::exists(*m_PATH);}
 void GdbDiscuss::FileConf()
 {
     bool find = false;
-    if (QFile::exists(QString("conf.ini"))) 
+    if (QFile::exists(QString(CONFIG_FILE))) 
     {
-        QFile *file = new QFile(QString("conf.ini"));
+        QFile *file = new QFile(QString(CONFIG_FILE));
         file->open(QIODevice::ReadOnly);
 #if defined Q_OS_LINUX
       QString  gdb_path = "GDB_PATH_X11=";

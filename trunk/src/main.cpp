@@ -27,14 +27,24 @@ int main(int argc, char *argv[])
     Q_INIT_RESOURCE(application);
 
     QApplication app(argc, argv);     
+	app.setGraphicsSystem("native");
     QTranslator translator;
     #if defined(Q_OS_WIN)
-	translator.load("qt_fr","C:\Qt\4.2.3\translations");
+//	translator.load("qt_fr","C:\Qt\4.2.3\translations");
     #else 
     	translator.load("qt_fr","/opt/QT_static/translations");
     #endif
     app.installTranslator(&translator);
+qDebug() << app.font().pointSize();
 
+//	app.setFont(QFont ("OpenSymbol", 12));
+    QFont myfont = app.font();
+	
+	myfont.setStyleHint(QFont::Helvetica,QFont::PreferAntialias);
+	myfont.setWeight(63);
+	app.setFont(myfont);
+qDebug() << app.font().styleStrategy();
+qDebug() << app.styleSheet();
 	//app.setFont(QFont ("OpenSymbol", 12));
 	//app.setFont(QFont ("Gothic", 18));
     QSplashScreen splash(QPixmap(QString(":/images/splashscreen.png"),0,Qt::AutoColor),0);
@@ -42,8 +52,10 @@ int main(int argc, char *argv[])
     MainWindow mainWin;
     mainWin.show();
     splash.finish(&mainWin);
- //QFontDatabase database;
+    //test to delete
+// QFontDatabase database;
 //foreach(QString fontname, database.families())
-   // qDebug() << fontname;
+  //  qDebug() << fontname;
+//end test
     return app.exec();
 }

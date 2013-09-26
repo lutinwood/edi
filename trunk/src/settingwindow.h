@@ -24,6 +24,7 @@
 #include <QtGui>
 #include <QtCore>
 
+#define CONFIG_FILE "conf.ini"
 /**
 *  Fenêtre de préférence de l'application
 *  @author MANIVONG Vilayvanh et Julien Courcelle

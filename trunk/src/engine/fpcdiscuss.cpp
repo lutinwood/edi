@@ -59,11 +59,11 @@ void FpcDiscuss::kill()
 void FpcDiscuss::FileConf()
 {
     bool find = false;
-    if (QFile::exists(QString("conf.ini"))) 
+    if (QFile::exists(QString(CONFIG_FILE))) 
     {
-        QFile *file = new QFile(QString("conf.ini"));
+        QFile *file = new QFile(QString(CONFIG_FILE));
         file->open(QIODevice::ReadOnly);
-        if (!m_OS)
+       
        
 #if defined (__linux__) 
             while (!file->atEnd() && !find)
