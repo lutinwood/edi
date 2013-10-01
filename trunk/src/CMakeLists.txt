@@ -31,15 +31,18 @@ FIND_PACKAGE(Qscintilla REQUIRED)
 
 FIND_PACKAGE(Qt4 4.8.1 REQUIRED QtCore QtGui QtXml)
 
+# Check directory exist
+SET(QSCI_DIR "/opt/qt_static_4_8_4")
 IF(${QSCINTILLA_INCLUDE_DIR})
-	MESSAGE("OK")
+        MESSAGE("OK")
 ELSE()
-	SET(QSCINTILLA_INCLUDE_DIR /opt/QT_static/include)
-	MESSAGE("NOT OK ${QSCINTILLA_INCLUDE_DIR}")
+        SET(QSCINTILLA_INCLUDE_DIR ${QSCI_DIR}/include)
+        MESSAGE("NOT OK ${QSCINTILLA_INCLUDE_DIR}")
 ENDIF()
+
 	
 IF( NOT ${QSCINTILLA_LIBRARY})
-	SET(QSCINTILLA_LIBRARY /opt/QT_static/lib/libqscintilla2.a)
+	SET(QSCINTILLA_LIBRARY ${QSCI_DIR}/lib/libqscintilla2.a)
 	MESSAGE("NO LIB ${QSCINTILLA_LIBRARY}")
 ELSE()
 	MESSAGE("THERE IS ONE")
@@ -65,12 +68,19 @@ INCLUDE_DIRECTORIES(${QSCINTILLA_INCLUDE_DIR})
 ###		
 IF(UNIX)
 
-SET(qt_include_dir /opt/QT_static/include/)
+SET(qt_include_dir /opt/qt_static_4_8_4/include/)
 MESSAGE(" INCLUDE FOLDER ${qt_include_dir}")
 include_directories(${qt_include_dir})
-link_directories(/opt/QT_static/lib)
+link_directories(/opt/qt_static_4_8_4/lib)
 	ADD_EXECUTABLE(edi ${SRC} ${MOC_SRCS} ${RSRC} ${Moc_Eng} ${engine})
-	TARGET_LINK_LIBRARIES (edi ${QSCINTILLA_LIBRARY} ${QT_LIBARIES} engine ${QT_QTEST_LIBRARY} QtGui QtTest QtCore pthread X11 xcb Xrender Xext rt)
+	TARGET_LINK_LIBRARIES (
+		edi ${QSCINTILLA_LIBRARY} ${QT_LIBARIES} 
+		engine ${QT_QTEST_LIBRARY} 
+		QtGui QtTest QtCore pthread X11 xcb Xrender Xext rt png12
+		SM fontconfig glib-2.0 freetype z gobject-2.0 ICE Xdmcp 
+		 pcre Xau expat dl Xi c stdc++ 
+				)
+
 ENDIF()
 
 IF(WINDOWS)

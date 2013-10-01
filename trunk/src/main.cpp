@@ -9,7 +9,8 @@
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURP:q
+OSE.  See the         *
  *   GNU General Public License for more details.                          *
  *                                                                         *
  *   You should have received a copy of the GNU General Public License     *
@@ -27,27 +28,30 @@ int main(int argc, char *argv[])
     Q_INIT_RESOURCE(application);
 
     QApplication app(argc, argv);     
-	app.setGraphicsSystem("native");
+//app.setGraphicsSystem("native");
     QTranslator translator;
     #if defined(Q_OS_WIN)
-//	translator.load("qt_fr","C:\Qt\4.2.3\translations");
+	translator.load("qt_fr","C:\Qt\4.2.3\translations");
     #else 
-    	translator.load("qt_fr","/opt/QT_static/translations");
+    	translator.load("qt_fr","/opt/qt_static_4_8_4/translations");
     #endif
+	//app.setStyle("cleanlooks");
+	app.setStyle("plastique");
     app.installTranslator(&translator);
-qDebug() << app.font().pointSize();
+//qDebug() << app.font().pointSize();
 
 //	app.setFont(QFont ("OpenSymbol", 12));
     QFont myfont = app.font();
 	
 	myfont.setStyleHint(QFont::Helvetica,QFont::PreferAntialias);
 	myfont.setWeight(63);
-	app.setFont(myfont);
-qDebug() << app.font().styleStrategy();
-qDebug() << app.styleSheet();
+//	app.setFont(myfont);
+//qDebug() << app.font().styleStrategy();
+//qDebug() << app.styleSheet();
 	//app.setFont(QFont ("OpenSymbol", 12));
 	//app.setFont(QFont ("Gothic", 18));
-    QSplashScreen splash(QPixmap(QString(":/images/splashscreen.png"),0,Qt::AutoColor),0);
+    QSplashScreen splash(QPixmap(QString(":/images/splashscreen.png"),
+	0,Qt::AutoColor),0);
     splash.show();
     MainWindow mainWin;
     mainWin.show();

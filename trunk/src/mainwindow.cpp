@@ -949,8 +949,8 @@ void MainWindow::initScintilla()
     //QFont myfont = app.font();
     m_textEdit->setFont(QFont ("Newspaper",18,18));
     QFontInfo myinfo = m_textEdit->fontInfo();
-    qDebug() << myinfo.family();
-    qDebug() << myinfo.rawMode();
+    //qDebug() << myinfo.family();
+    //qDebug() << myinfo.rawMode();
     //création de la marge avec les numéros de lignes
     m_textEdit->setMarginLineNumbers(0,true);
     //création d'un marge à  droite
