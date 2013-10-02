@@ -41,11 +41,14 @@ MainWindow::MainWindow()
 
     m_compilerOutput = new ListWidget(this);
     connect(m_compilerOutput,
-            SIGNAL(getShortMessage()), this, SLOT(shortMessageShow()) );
+            SIGNAL(getShortMessage()), 
+			this, SLOT(shortMessageShow()) );
     connect(m_compilerOutput,
-            SIGNAL(getMediumMessage()), this, SLOT(mediumMessageShow()) );
+            SIGNAL(getMediumMessage()), 
+			this, SLOT(mediumMessageShow()) );
     connect(m_compilerOutput,
-            SIGNAL(getLongMessage()), this, SLOT(longMessageShow()) );
+            SIGNAL(getLongMessage()), 
+			this, SLOT(longMessageShow()) );
 
     createActions();
     createMenus();
@@ -60,8 +63,10 @@ MainWindow::MainWindow()
     QVBoxLayout *m_layout = new QVBoxLayout(m_debugWidget);
     m_layout->addWidget(m_debugOutput);
     m_layout->addWidget(m_cmdDebug);
-    connect(m_cmdDebug,SIGNAL(returnPressed()),this,SLOT(runCmdDebug()));
-    connect(this,SIGNAL(cmdHistory(QString)),m_cmdDebug,SLOT(enter(QString)));
+    connect(m_cmdDebug,SIGNAL(returnPressed()),
+	this,SLOT(runCmdDebug()));
+    connect(this,SIGNAL(cmdHistory(QString)),
+	m_cmdDebug,SLOT(enter(QString)));
     
     m_applicationOutput = new QTextEdit(this);
     m_applicationOutput->setReadOnly(true);
@@ -69,12 +74,14 @@ MainWindow::MainWindow()
     m_tabWidget->addTab(m_applicationOutput,tr("Application"));
     m_tabWidget->addTab(m_compilerOutput,tr("Compilateur"));
     m_tabWidget->addTab(m_debugWidget,tr("Débogueur"));
-    //insertion de l'objet dock servant à avoir une barre d'outils modulable
+    //insertion de l'objet dock servant à avoir une 
+	//barre d'outils modulable
     m_dockWidget = new QDockWidget(tr("Outils"),this,0);
     m_dockWidget->setWidget(m_tabWidget);
     m_dockWidget->setFeatures(QDockWidget::DockWidgetMovable);
     setCentralWidget(m_textEdit);
-    this->addDockWidget(Qt::BottomDockWidgetArea,m_dockWidget,Qt::Horizontal);
+    this->addDockWidget(Qt::BottomDockWidgetArea,
+	m_dockWidget,Qt::Horizontal);
 
     readSettings();
 
@@ -94,15 +101,24 @@ MainWindow::MainWindow()
     m_compiler = new FpcDiscuss(this);
     m_application = new ApplicationDiscuss(this);
     m_debug = new GdbDiscuss(this);
-    connect(this,SIGNAL(compile(QString)),m_compiler,SLOT(Execute(QString)));
-    connect(m_compiler,SIGNAL(setCompileEnabled(bool)),this,SLOT(setCompileEnabled(bool)));
-    connect(this,SIGNAL(run(QString)),m_application,SLOT(Execute(QString)));
-    connect(m_application,SIGNAL(setApplicationEnabled(bool)),this,SLOT(setApplicationEnabled(bool)));
-    connect(this,SIGNAL(debug(QString)),m_debug,SLOT(Execute(QString)));
-    connect(m_debug,SIGNAL(setDebugEnabled(bool)),this,SLOT(setDebugEnabled(bool)));
-    connect(m_debugNextAct,SIGNAL(triggered()),m_debug,SLOT(next()));
-    connect(m_debugRunAct,SIGNAL(triggered()),m_debug,SLOT(run()));
-    connect(this,SIGNAL(writeCmdDebug(QString)),m_debug,SLOT(writeCmd(QString)));
+    connect(this,SIGNAL(compile(QString)),
+	m_compiler,SLOT(Execute(QString)));
+    connect(m_compiler,SIGNAL(setCompileEnabled(bool)),
+	this,SLOT(setCompileEnabled(bool)));
+    connect(this,SIGNAL(run(QString)),
+	m_application,SLOT(Execute(QString)));
+    connect(m_application,SIGNAL(setApplicationEnabled(bool)),
+	this,SLOT(setApplicationEnabled(bool)));
+    connect(this,SIGNAL(debug(QString)),
+	m_debug,SLOT(Execute(QString)));
+    connect(m_debug,SIGNAL(setDebugEnabled(bool)),
+	this,SLOT(setDebugEnabled(bool)));
+    connect(m_debugNextAct,SIGNAL(triggered()),
+	m_debug,SLOT(next()));
+    connect(m_debugRunAct,SIGNAL(triggered()),
+	m_debug,SLOT(run()));
+    connect(this,SIGNAL(writeCmdDebug(QString)),
+	m_debug,SLOT(writeCmd(QString)));
     connect(this,SIGNAL(displayCompilerList(QString)),
 	m_compilerOutput,SLOT(displayCompilerList(QString)));
     //affichage ou non du composant de débogue
@@ -160,7 +176,8 @@ void MainWindow::open()
 #if defined Q_OS_LINUX
     QString fileName =
             QFileDialog::getOpenFileName(
-                this,tr("Ouvrir un fichier"),QDir::homePath()+"/Bureau","Pascal (*.pas)");
+                this,tr("Ouvrir un fichier"),
+				QDir::homePath()+"/Bureau","Pascal (*.pas)");
 #elif defined Q_OS_WIN
         QString fileName =
                 QFileDialog::getOpenFileName(
@@ -181,11 +198,13 @@ bool MainWindow::save()
     }
 }
 
-//sauvegarde d'un fichier à un emplacement choisit par l'utilisateur
+//sauvegarde d'un fichier à un emplacement choisit 
+//par l'utilisateur
 bool MainWindow::saveAs()
 {
  QString fileName = QFileDialog::getSaveFileName(
-			this,tr("Sauvegarder sous..."),"untitled.pas",tr("Pascal (*.pas)"));
+			this,tr("Sauvegarder sous..."),
+			"untitled.pas",tr("Pascal (*.pas)"));
 	
 	if (fileName.isEmpty())
         	return false;
@@ -215,7 +234,8 @@ void MainWindow::find()
      m_findDialog->show();
 }
 
-//remplacement d'une expression régulière dans le composant Scintilla 
+//remplacement d'une expression régulière dans le 
+//composant Scintilla 
 void MainWindow::replace()
 {
     if (!m_replaceDialog) 
@@ -242,7 +262,8 @@ void MainWindow::replace()
      m_replaceDialog->show();
 }
 
-//remplace le texte séléctionner dans le composant Scintilla par la chaîne str
+//remplace le texte séléctionner dans le composant Scintilla 
+//par la chaîne str
 void MainWindow::replaceText(QString str)
 {
 	m_textEdit->replace(str);
@@ -302,7 +323,8 @@ void MainWindow::documentWasModified()
 }
 
 //recherche l'expression régulière de la droite vers la gauche
-void MainWindow::searchBefore(const QString &str, Qt::CaseSensitivity cs)
+void MainWindow::searchBefore(const QString &str, 
+Qt::CaseSensitivity cs)
 {
 	if (m_findDialog->m_findBefore == false)	
 	{	
@@ -333,7 +355,8 @@ void MainWindow::selectAll()
     emit selectAll(true);
 }
 
-//affiche ou cache la barre d'outil pour la compilation et le debugueur
+//affiche ou cache la barre d'outil pour la 
+//compilation et le debugueur
 void MainWindow::removeToolBar()
 {
     if (!(m_toolBarDisplayAct->isChecked()))
@@ -393,7 +416,8 @@ void MainWindow::warningLine()
 //émission d'un message si une application n'est pas trouvée
 void MainWindow::appNotFound(QString str)
 {
-    QMessageBox::warning(NULL,QObject::tr("Application non trouvée"),str);
+    QMessageBox::warning(NULL,
+	QObject::tr("Application non trouvée"),str);
     m_compileAct->setDisabled(true);
     m_compileRunAct->setDisabled(true);
     m_debugAct->setDisabled(true);
@@ -457,7 +481,8 @@ void MainWindow::debug()
             (m_compiler->m_prog)->waitForFinished(-1);
         if (m_compiler->m_OutputStream !=NULL)
         {
-            if (!(m_compiler->m_OutputStream)->contains("compilation aborted",Qt::CaseInsensitive))
+            if (!(m_compiler->m_OutputStream)
+			->contains("compilation aborted",Qt::CaseInsensitive))
             {//si la compilation à réussie
                 m_cmdDebug->setEnabled(true);
                 if ((m_debug->m_OutputStream) != NULL )
@@ -465,10 +490,12 @@ void MainWindow::debug()
                 if ((m_debug->m_ErrorStream) != NULL )
                     *(m_debug->m_ErrorStream) = "";
                 emit debug(m_curFile);
-                connect(m_killAct,SIGNAL(triggered()),m_debug,SLOT(kill()));
+                connect(m_killAct,SIGNAL(triggered()),
+				m_debug,SLOT(kill()));
                 disconnect(	m_textEdit,
 				SIGNAL(marginClicked(int,int,Qt::KeyboardModifiers)),
-				this,SLOT(marginClicked(int,int,Qt::KeyboardModifiers)));
+				this,SLOT(marginClicked
+				(int,int,Qt::KeyboardModifiers)));
             }
             else QMessageBox::warning(NULL,
 		QObject::tr("Attention"),
@@ -485,7 +512,8 @@ void MainWindow::debug()
 void MainWindow::runCmdDebug()
 {
     QString str(m_cmdDebug->text());
-    if (m_cmdDebug->isModified()) emit cmdHistory(m_cmdDebug->text());
+    if (m_cmdDebug->isModified()) 
+	emit cmdHistory(m_cmdDebug->text());
     m_cmdDebug->clear();
     emit writeCmdDebug(str);
 }
@@ -511,16 +539,19 @@ void MainWindow::displayCompile(QString str)
     {
         m_nextCompileErrorAct->setEnabled(true);
         m_previousCompileErrorAct->setEnabled(true);
-        m_textEdit->setCaretLineBackgroundColor(QColor(255, 198, 190));
+        m_textEdit->setCaretLineBackgroundColor
+		(QColor(255, 198, 190));
     }
     else{
         m_nextCompileErrorAct->setEnabled(false);
         m_previousCompileErrorAct->setEnabled(false);
-        m_textEdit->setCaretLineBackgroundColor(QColor(244, 244, 255));
+        m_textEdit->setCaretLineBackgroundColor
+		(QColor(244, 244, 255));
     }
 }
 
-//affiche dans la barre d'outil le résultat du flux de sortie de l'application pascal
+//affiche dans la barre d'outil le résultat du flux 
+//de sortie de l'application pascal
 void MainWindow::displayApplication(QString str)
 {
     m_applicationOutput->clear();
@@ -530,7 +561,8 @@ void MainWindow::displayApplication(QString str)
         m_removeAct->setDisabled(false);
         m_dockWidget->show();
     }
-    m_tabWidget->setCurrentWidget(m_applicationOutput);
+    m_tabWidget->setCurrentWidget
+	(m_applicationOutput);
     m_applicationOutput->setText(str);
 }
 
@@ -548,7 +580,8 @@ void MainWindow::displayDebug(QString str)
     m_debugOutput->clear();
     m_tabWidget->setCurrentWidget(m_debugWidget);
     m_debugOutput->setPlainText(str);
-    m_debugOutput->moveCursor(QTextCursor::End,QTextCursor::MoveAnchor);
+    m_debugOutput->moveCursor
+	(QTextCursor::End,QTextCursor::MoveAnchor);
     m_cmdDebug->setFocus();
 }
 
@@ -603,23 +636,28 @@ void MainWindow::longMessageShow()
     emit message(2);
 }
 
-void MainWindow::marginClicked(int, int line, Qt::KeyboardModifiers)
+void MainWindow::marginClicked(int, int line, 
+Qt::KeyboardModifiers)
 {
     m_textEdit->markerAdd(line,2);
     std::vector<int>::iterator it;
     bool find = false;
-    for (it = m_debugMarkerVect.begin() ; it != m_debugMarkerVect.end() ; it++)
+    for (it = m_debugMarkerVect.begin() ; 
+	it != m_debugMarkerVect.end() ; it++)
     {
         if (*it == line)
         {
             find = true;
             if (m_debugMarkerVect.size() == 1)
-            {//on regarde si il ne reste qu'un seul objet dans le vector
+            {//on regarde si il ne reste qu'un 
+			//seul objet dans le vector
                 m_debugMarkerVect.pop_back();
                 break;
             }
-            else if (m_debugMarkerVect.at(m_debugMarkerVect.size()-1) == (*it))
-                {//on regarde si l'objet trouvé est le dernier dans le vector
+            else if (m_debugMarkerVect.at
+			(m_debugMarkerVect.size()-1) == (*it))
+                {//on regarde si l'objet trouvé 
+				//est le dernier dans le vector
                     m_debugMarkerVect.pop_back();
                     break;
                 }
@@ -635,7 +673,8 @@ void MainWindow::writeBreakPoints()
 {
     //cout << "ecriture des breakpoints" << endl;
     std::vector<int>::iterator it;
-    for (it = m_debugMarkerVect.begin() ; it != m_debugMarkerVect.end() ; it++)
+    for (it = m_debugMarkerVect.begin() ; 
+	it != m_debugMarkerVect.end() ; it++)
     {
         //cout << "break " << *it << endl;
         int line = (*it)+1;
@@ -646,7 +685,9 @@ void MainWindow::writeBreakPoints()
 
 void MainWindow::connectBreakPoints()
 {
-     connect(m_textEdit,SIGNAL(marginClicked(int,int,Qt::KeyboardModifiers)),this,SLOT(marginClicked(int,int,Qt::KeyboardModifiers)));
+     connect(m_textEdit,SIGNAL(marginClicked
+	 (int,int,Qt::KeyboardModifiers)),
+	 this,SLOT(marginClicked(int,int,Qt::KeyboardModifiers)));
 }
 
 void MainWindow::print()
@@ -666,9 +707,11 @@ void MainWindow::cursorPositionChanged (int line,int col)
     {
         m_compilerOutput->selectErrorItem(line+1);
     }
-    QString rowStr(tr(" Ligne : ")+QString::number(line+1,10)+tr(" "));
+    QString rowStr(tr(" Ligne : ")+
+	QString::number(line+1,10)+tr(" "));
     m_rowLabel->setText(rowStr);
-    QString colStr(tr(" Colonne : ")+QString::number(col,10)+tr(" "));
+    QString colStr(tr(" Colonne : ")+
+	QString::number(col,10)+tr(" "));
     m_colLabel->setText(colStr);
 }
 
@@ -908,28 +951,33 @@ void MainWindow::initFileconf()
 
         file.open(QIODevice::WriteOnly);
 #if defined Q_OS_LINUX
-        file.write("--> Chemin menant au compilateur FPC sous Linux <--\n");
-	//modifier par un appel system `which fpc` qui retourne le chemin de l'executable
-        file.write("FPC_PATH_X11=/usr/bin/fpc\n");
-	file.write("--> Arguments du compilateur FPC <--\n");
-	// Modifier par un appel system `fpc -iV` retourne le numero de  la version de fpc 
-        file.write("FPC_ARGS=-g -Fr/usr/lib/fpc/2.4.4/msg/errorf.msg \n");
-        file.write("--> Chemin menant au débogueur GDB sous Linux <--\n");
-        file.write("GDB_PATH_X11=/usr/bin/gdb\n");
-        file.write("--> Chemin menant aux différents terminaux sous Linux <--\n");
-        file.write("TERM_PATH_X11=/usr/bin/konsole,/usr/bin/xterm,/usr/bin/gnome-terminal\n");
-        file.write("--> Chemin du dossier contenant la documentation sous Linux <--\n");
-        file.write("DOC_PATH_X11=~/.EDI/doc\n");
+file.write("--> Chemin menant au compilateur FPC sous Linux <--\n");
+//modifier par un appel system `which fpc` qui retourne 
+//le chemin de l'executable
+file.write("FPC_PATH_X11=/usr/bin/fpc\n");
+file.write("--> Arguments du compilateur FPC <--\n");
+// Modifier par un appel system `fpc -iV` 
+//retourne le numero de  la version de fpc 
+file.write("FPC_ARGS=-g -Fr/usr/lib/fpc/2.4.4/msg/errorf.msg \n");
+file.write("--> Chemin menant au débogueur GDB sous Linux <--\n");
+file.write("GDB_PATH_X11=/usr/bin/gdb\n");
+file.write("--> Chemin menant aux différents \
+			terminaux sous Linux <--\n");
+file.write("TERM_PATH_X11=/usr/bin/konsole,\
+			/usr/bin/xterm,/usr/bin/gnome-terminal\n");
+file.write("--> Chemin du dossier contenant \
+			la documentation sous Linux <--\n");
+file.write("DOC_PATH_X11=~/.EDI/doc\n");
 
 #elif defined Q_OS_WIN32
-       	file.write("--> Chemin menant au compilateur FPC sous Windows <--\n");
-        file.write("FPC_PATH_WIN32=C:\\FPC\\2.1.4\\bin\\i386-win32\\fpc.exe\n");
-        file.write("--> Chemin menant au compilateur GDB sous Windows <--\n");
-        file.write("GDB_PATH_WIN32=C:\\MinGw\\bin\\gdb.exe\n");
-        file.write("--> Chemin menant au terminal de Windows <--\n");
-        file.write("TERM_PATH_WIN32=C:\\WINDOWS\\system32\\cmd.exe\n");
-        file.write("--> Chemin du dossier contenant la documentation sous Windows <--\n");
-        file.write("DOC_PATH_WIN32=doc\\fpdocs-2.0.4\\\n");
+file.write("--> Chemin menant au compilateur FPC sous Windows <--\n");
+file.write("FPC_PATH_WIN32=C:\\FPC\\2.6.2\\bin\\i386-win32\\fpc.exe\n");
+file.write("--> Chemin menant au compilateur GDB sous Windows <--\n");
+file.write("GDB_PATH_WIN32=C:\\FPC\\2.6.2\\bin\\i386-win32\\gdb.exe\n");
+file.write("--> Chemin menant au terminal de Windows <--\n");
+file.write("TERM_PATH_WIN32=C:\\WINDOWS\\system32\\cmd.exe\n");
+file.write("--> Chemin du dossier contenant la documentation sous Windows <--\n");
+file.write("DOC_PATH_WIN32=doc\\fpdocs-2.0.4\\\n");
 
 #endif
         
@@ -945,12 +993,6 @@ void MainWindow::initFileconf()
 void MainWindow::initScintilla()
 {
     m_textEdit = new QsciScintilla;
-    //création de la police
-    //QFont myfont = app.font();
-    m_textEdit->setFont(QFont ("Newspaper",18,18));
-    QFontInfo myinfo = m_textEdit->fontInfo();
-    //qDebug() << myinfo.family();
-    //qDebug() << myinfo.rawMode();
     //création de la marge avec les numéros de lignes
     m_textEdit->setMarginLineNumbers(0,true);
     //création d'un marge à  droite
@@ -980,195 +1022,269 @@ void MainWindow::initScintilla()
 //créations des différentes actions possibles
 void MainWindow::createActions()
 {
-    m_newAct = new QAction(QIcon(":/images/new.png"), tr("&Nouveau"), this);
+    m_newAct = new QAction(QIcon(":/images/new.png"), 
+	tr("&Nouveau"), this);
     m_newAct->setShortcut(tr("Ctrl+N"));
     m_newAct->setStatusTip(tr("Créer un nouveau fichier"));
-    connect(m_newAct, SIGNAL(triggered()), this, SLOT(newFile()));
+    connect(m_newAct, SIGNAL(triggered()), 
+	this, SLOT(newFile()));
 
-    m_openAct = new QAction(QIcon(":/images/open.png"), tr("&Ouvrir..."), this);
+    m_openAct = new QAction(QIcon(":/images/open.png"), 
+	tr("&Ouvrir..."), this);
     m_openAct->setShortcut(tr("Ctrl+O"));
     m_openAct->setStatusTip(tr("Ouvrir un fichier existant"));
     connect(m_openAct, SIGNAL(triggered()), this, SLOT(open()));
 
-    m_saveAct = new QAction(QIcon(":/images/save.png"), tr("&Sauvegarder"), this);
+    m_saveAct = new QAction(QIcon(":/images/save.png"), 
+	tr("&Sauvegarder"), this);
     m_saveAct->setShortcut(tr("Ctrl+S"));
-    m_saveAct->setStatusTip(tr("Sauvegarder le document sur le disque"));
-    connect(m_saveAct, SIGNAL(triggered()), this, SLOT(save()));
+    m_saveAct->setStatusTip(
+	tr("Sauvegarder le document sur le disque"));
+    connect(m_saveAct, SIGNAL(triggered()), 
+	this, SLOT(save()));
 
-    m_saveAsAct = new QAction(QIcon(":/images/save-as.png"),tr("Sa&uvegarder sous..."), this);
-    m_saveAsAct->setStatusTip(tr("Sauvegarde le document sous un nouveau nom"));
+    m_saveAsAct = new QAction(QIcon(":/images/save-as.png"),
+	tr("Sa&uvegarder sous..."), this);
+    m_saveAsAct->setStatusTip(
+	tr("Sauvegarde le document sous un nouveau nom"));
     connect(m_saveAsAct, SIGNAL(triggered()), this, SLOT(saveAs()));
 
-    m_exitAct = new QAction(QIcon(":/images/exit.png"),tr("&Quitter"), this);
+    m_exitAct = new QAction(QIcon(":/images/exit.png"),
+	tr("&Quitter"), this);
     m_exitAct->setShortcut(tr("Ctrl+Q"));
     m_exitAct->setStatusTip(tr("Quitter l'application"));
-    connect(m_exitAct, SIGNAL(triggered()), this, SLOT(close()));
+    connect(m_exitAct, SIGNAL(triggered()), 
+	this, SLOT(close()));
 
-    m_cutAct = new QAction(QIcon(":/images/cut.png"), tr("Cou&per"), this);
+    m_cutAct = new QAction(QIcon(":/images/cut.png"), 
+	tr("Cou&per"), this);
     m_cutAct->setShortcut(tr("Ctrl+X"));
     m_cutAct->setStatusTip(tr("Couper la séléction courante"));
-    connect(m_cutAct, SIGNAL(triggered()), m_textEdit, SLOT(cut()));
+    connect(m_cutAct, SIGNAL(triggered()),
+	m_textEdit, SLOT(cut()));
 
-    m_copyAct = new QAction(QIcon(":/images/copy.png"), tr("&Copier"), this);
+    m_copyAct = new QAction(QIcon(":/images/copy.png"), 
+	tr("&Copier"), this);
     m_copyAct->setShortcut(tr("Ctrl+C"));
     m_copyAct->setStatusTip(tr("Copier la séléction courante"));
-    connect(m_copyAct, SIGNAL(triggered()), m_textEdit, SLOT(copy()));
+    connect(m_copyAct, SIGNAL(triggered()), 
+	m_textEdit, SLOT(copy()));
 
-    m_pasteAct = new QAction(QIcon(":/images/paste.png"), tr("Co&ller"), this);
+    m_pasteAct = new QAction(QIcon(":/images/paste.png"),
+	tr("Co&ller"), this);
     m_pasteAct->setShortcut(tr("Ctrl+V"));
     m_pasteAct->setStatusTip(tr("Coller sur la zone de texte"));
-    connect(m_pasteAct, SIGNAL(triggered()), m_textEdit, SLOT(paste()));
+    connect(m_pasteAct, SIGNAL(triggered()), 
+	m_textEdit, SLOT(paste()));
 
-    m_aboutAct = new QAction(QIcon(":/images/info.png"),tr("A &Propos"), this);
+    m_aboutAct = new QAction(QIcon(":/images/info.png"),
+	tr("A &Propos"), this);
     m_aboutAct->setStatusTip(tr("Montre la fenêtre à  propos"));
-    connect(m_aboutAct, SIGNAL(triggered()), this, SLOT(about()));
+    connect(m_aboutAct, SIGNAL(triggered()), 
+	this, SLOT(about()));
 
-    m_aboutQtAct = new QAction(QIcon(":/images/info.png"),tr("A Propos de &Qt"), this);
-    m_aboutQtAct->setStatusTip(tr("Show the Qt library's About box"));
-    connect(m_aboutQtAct, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+    m_aboutQtAct = new QAction(QIcon(":/images/info.png"),
+	tr("A Propos de &Qt"), this);
+    m_aboutQtAct->setStatusTip(
+	tr("Show the Qt library's About box"));
+    connect(m_aboutQtAct, SIGNAL(triggered()), 
+	qApp, SLOT(aboutQt()));
 
-    m_helpAct = new QAction(QIcon(":/images/help.png"),tr("&Aide"), this);
+    m_helpAct = new QAction(QIcon(":/images/help.png"),
+	tr("&Aide"), this);
     m_helpAct->setShortcut(tr("F1"));
     m_helpAct->setStatusTip(tr("Aide"));
-    connect(m_helpAct, SIGNAL(triggered()), this, SLOT(help()));
+    connect(m_helpAct, SIGNAL(triggered()), 
+	this, SLOT(help()));
 
     m_cutAct->setEnabled(false);
     m_copyAct->setEnabled(false);
-    connect(m_textEdit, SIGNAL(copyAvailable(bool)), m_cutAct, SLOT(setEnabled(bool)));
-    connect(m_textEdit, SIGNAL(copyAvailable(bool)), m_copyAct, SLOT(setEnabled(bool)));
+    connect(m_textEdit, SIGNAL(copyAvailable(bool)), 
+	m_cutAct, SLOT(setEnabled(bool)));
+    connect(m_textEdit, SIGNAL(copyAvailable(bool)), 
+	m_copyAct, SLOT(setEnabled(bool)));
 	
-    m_researchAct = new QAction(QIcon(":/images/find.png"),tr("&Rechercher"),this);
+    m_researchAct = new QAction(QIcon(":/images/find.png"),
+	tr("&Rechercher"),this);
     m_researchAct->setShortcut(tr("Ctrl+F"));
     m_researchAct->setStatusTip(tr("Rechercher"));
     connect(m_researchAct,SIGNAL(triggered()),this,SLOT(find()));
 
-    m_researchNextAct = new QAction(QIcon(":/images/find.png"),tr("Rechercher &suivant"),this);
+    m_researchNextAct = new QAction(QIcon(":/images/find.png"),
+	tr("Rechercher &suivant"),this);
     m_researchNextAct->setShortcut(tr("F3"));
     m_researchNextAct->setStatusTip(tr("Rechercher suivant"));
-    connect(m_researchNextAct,SIGNAL(triggered()),this,SLOT(searchNext()));
+    connect(m_researchNextAct,SIGNAL(triggered()),
+	this,SLOT(searchNext()));
 
 
-    m_replaceAct = new QAction(QIcon(":/images/find-replace.png"),tr("Rem&placer"),this);
+    m_replaceAct = new QAction(QIcon(":/images/find-replace.png"),
+	tr("Rem&placer"),this);
     m_replaceAct->setShortcut(tr("Ctrl+R"));
     m_replaceAct->setStatusTip(tr("Remplacer"));
-    connect(m_replaceAct,SIGNAL(triggered()),this,SLOT(replace()));	
+    connect(m_replaceAct,SIGNAL(triggered()),
+	this,SLOT(replace()));	
 
-    m_undoAct = new QAction(QIcon(":/images/undo.png"),tr("&Défaire"),this);
+    m_undoAct = new QAction(QIcon(":/images/undo.png"),
+	tr("&Défaire"),this);
     m_undoAct->setShortcut(tr("Ctrl+Z"));
     m_undoAct->setStatusTip(tr("Défaire"));
-    connect(m_undoAct,SIGNAL(triggered()),m_textEdit,SLOT(undo()));
+    connect(m_undoAct,SIGNAL(triggered()),
+	m_textEdit,SLOT(undo()));
 
-    m_redoAct = new QAction(QIcon(":/images/redo.png"),tr("&Refaire"),this);
+    m_redoAct = new QAction(QIcon(":/images/redo.png"),
+	tr("&Refaire"),this);
     m_redoAct->setShortcut(tr("Ctrl+Y"));
     m_redoAct->setStatusTip(tr("Refaire"));
-    connect(m_redoAct,SIGNAL(triggered()),m_textEdit,SLOT(redo()));
+    connect(m_redoAct,SIGNAL(triggered()),m_textEdit,
+	SLOT(redo()));
 
-    m_removeAct = new QAction(QIcon(":/images/delete.png"),tr("&Supprimer"),this);
+    m_removeAct = new QAction(QIcon(":/images/delete.png"),
+	tr("&Supprimer"),this);
     m_removeAct->setStatusTip(tr("Supprimer"));
-    connect(m_removeAct,SIGNAL(triggered()),m_textEdit,SLOT(removeSelectedText()));
+    connect(m_removeAct,SIGNAL(triggered()),m_textEdit,
+	SLOT(removeSelectedText()));
 
-    m_lineAct = new QAction(QIcon(":/images/go-to-line.png"),tr("&Aller à "),this);
+    m_lineAct = new QAction(QIcon(":/images/go-to-line.png"),
+	tr("&Aller à "),this);
     m_lineAct->setShortcut(tr("Ctrl+G"));
     m_lineAct->setStatusTip(tr("Aller à "));
     connect(m_lineAct,SIGNAL(triggered()),this,SLOT(goLine()));
 
-    m_selectAllAct = new QAction(QIcon(":/images/select-all.png"),tr("Sélectionner &tout"),this);
+    m_selectAllAct = new QAction(QIcon(":/images/select-all.png"),
+	tr("Sélectionner &tout"),this);
     m_selectAllAct->setShortcut(tr("Ctrl+A"));
     m_selectAllAct->setStatusTip(tr("Sélectionner tout"));
-    connect(m_selectAllAct,SIGNAL(triggered()),this,SLOT(selectAll()));
-    connect(this,SIGNAL(selectAll(bool)),m_textEdit,SLOT(selectAll(bool)));
+    connect(m_selectAllAct,SIGNAL(triggered()),
+	this,SLOT(selectAll()));
+    connect(this,SIGNAL(selectAll(bool)),
+	m_textEdit,SLOT(selectAll(bool)));
 
-    m_compileAct = new QAction(QIcon(":/images/compile.png"),tr("&Compiler"),this);
+    m_compileAct = new QAction(QIcon(":/images/compile.png"),
+	tr("&Compiler"),this);
     m_compileAct->setShortcut(tr("F8"));
     m_compileAct->setStatusTip(tr("Compiler"));
-    connect(m_compileAct,SIGNAL(triggered()),this,SLOT(compile()));
+    connect(m_compileAct,SIGNAL(triggered()),
+	this,SLOT(compile()));
 
-    m_compileRunAct = new QAction(QIcon(":/images/compile-run.png"),tr("Compiler et &exécuter"),this);
+    m_compileRunAct = new QAction(
+	QIcon(":/images/compile-run.png"),
+	tr("Compiler et &exécuter"),this);
     m_compileRunAct->setShortcut(tr("Shift+F9"));
     m_compileRunAct->setStatusTip(tr("Compiler et exécuter"));
-    connect(m_compileRunAct,SIGNAL(triggered()),this,SLOT(compileAndRun()));
+    connect(m_compileRunAct,SIGNAL(triggered()),
+	this,SLOT(compileAndRun()));
 
     m_settingCompileAct = new QAction(tr("Pré&férences"),this);
-    m_settingCompileAct->setStatusTip(tr("Préférences pour le compilateur"));
-    connect(m_settingCompileAct,SIGNAL(triggered()),this,SLOT(setting()));
+    m_settingCompileAct->setStatusTip(
+	tr("Préférences pour le compilateur"));
+    connect(m_settingCompileAct,
+	SIGNAL(triggered()),this,SLOT(setting()));
 
-    m_debugAct = new QAction(QIcon(":/images/debug.png"),tr("&Déboguer"),this);
+    m_debugAct = new QAction(QIcon(":/images/debug.png"),
+	tr("&Déboguer"),this);
     m_debugAct->setShortcut(tr("F9"));
     m_debugAct->setStatusTip(tr("Déboguer"));
-    connect(m_debugAct,SIGNAL(triggered()),this,SLOT(debug()));
+    connect(m_debugAct,SIGNAL(triggered()),
+	this,SLOT(debug()));
     
-    m_debugRunAct = new QAction(QIcon(":/images/debug-run.png"),tr("&Lancer l'application"),this);
+    m_debugRunAct = new QAction(QIcon(":/images/debug-run.png"),
+	tr("&Lancer l'application"),this);
     m_debugRunAct->setShortcut(tr("F10"));
     m_debugRunAct->setEnabled(false);
     m_debugRunAct->setStatusTip(tr("Lancer l'application"));
 
-    m_debugNextAct = new QAction(QIcon(":/images/next.png"),tr("&Etape suivante"),this);
+    m_debugNextAct = new QAction(QIcon(":/images/next.png"),
+	tr("&Etape suivante"),this);
     m_debugNextAct->setShortcut(tr("F5"));
     m_debugNextAct->setEnabled(false);
     m_debugNextAct->setStatusTip(tr("Etape suivante"));
 
-    m_killAct = new QAction(QIcon(":/images/process-stop.png"),tr("&Kill"),this);
+    m_killAct = new QAction(QIcon(":/images/process-stop.png"),
+	tr("&Kill"),this);
     m_killAct->setStatusTip(tr("Kill"));
     m_killAct->setEnabled(false);
 
-    m_toolBarDisplayAct = new QAction(tr("&Barre d'outils"),this);
+    m_toolBarDisplayAct = new QAction(tr("&Barre d'outils"),
+	this);
     m_toolBarDisplayAct->setStatusTip(tr("Barre d'outils"));
     m_toolBarDisplayAct->setCheckable(true);
     m_toolBarDisplayAct->setChecked(true);
-    connect(m_toolBarDisplayAct,SIGNAL(triggered()),this,SLOT(removeToolBar()));
+    connect(m_toolBarDisplayAct,SIGNAL(triggered()),
+	this,SLOT(removeToolBar()));
     
-    m_removeFileToolBarAct = new QAction(tr("Barre de fichier"),this);
+    m_removeFileToolBarAct = new QAction(tr("Barre de fichier"),
+	this);
     m_removeFileToolBarAct->setCheckable(true);
     m_removeFileToolBarAct->setChecked(true);
-    connect(m_removeFileToolBarAct,SIGNAL(triggered()),this,SLOT(removeFileBar()));
+    connect(m_removeFileToolBarAct,SIGNAL(triggered()),
+	this,SLOT(removeFileBar()));
 
-    m_removeEditToolBarAct = new QAction(tr("Barre d'edition"),this);	
+    m_removeEditToolBarAct = new QAction(tr("Barre d'edition"),
+	this);	
     m_removeEditToolBarAct->setCheckable(true);
     m_removeEditToolBarAct->setChecked(true);
-    connect(m_removeEditToolBarAct,SIGNAL(triggered()),this,SLOT(removeEditBar()));
+    connect(m_removeEditToolBarAct,SIGNAL(triggered()),
+	this,SLOT(removeEditBar()));
 	
-    m_removeBuildToolBarAct = new QAction(tr("Barre de construction"),this);
+    m_removeBuildToolBarAct = new QAction(
+	tr("Barre de construction"),this);
     m_removeBuildToolBarAct->setCheckable(true);
     m_removeBuildToolBarAct->setChecked(true);	
-    connect(m_removeBuildToolBarAct,SIGNAL(triggered()),this,SLOT(removeBuildBar()));
+    connect(m_removeBuildToolBarAct,SIGNAL(triggered()),
+	this,SLOT(removeBuildBar()));
 
-    m_removeDebugToolBarAct = new QAction(tr("Barre du débogueur"),this);
+    m_removeDebugToolBarAct = new QAction(
+	tr("Barre du débogueur"),this);
     m_removeDebugToolBarAct->setCheckable(true);
     m_removeDebugToolBarAct->setChecked(true);
-    connect(m_removeDebugToolBarAct,SIGNAL(triggered()),this,SLOT(removeDebugBar()));
+    connect(m_removeDebugToolBarAct,SIGNAL(triggered()),
+	this,SLOT(removeDebugBar()));
 
     m_longMessageAct = new QAction(tr("Message long"),this);
     m_longMessageAct->setCheckable(true);
-    connect(m_longMessageAct,SIGNAL(triggered()),this,SLOT(longMessageShow()));
+    connect(m_longMessageAct,SIGNAL(triggered()),
+	this,SLOT(longMessageShow()));
 
-    m_mediumMessageAct = new QAction(tr("Message moyen "),this);
+    m_mediumMessageAct = new QAction(tr("Message moyen "),
+	this);
     m_mediumMessageAct->setCheckable(true);
     m_mediumMessageAct->setChecked(true);
-    connect(m_mediumMessageAct,SIGNAL(triggered()),this,SLOT(mediumMessageShow()));
+    connect(m_mediumMessageAct,SIGNAL(triggered()),
+	this,SLOT(mediumMessageShow()));
 
-    m_shortMessageAct = new QAction(tr("Message court"),this);
+    m_shortMessageAct = new QAction(tr("Message court"),
+	this);
     m_shortMessageAct->setCheckable(true);
-    connect(m_shortMessageAct,SIGNAL(triggered()),this,SLOT(shortMessageShow()));
+    connect(m_shortMessageAct,SIGNAL(triggered()),
+	this,SLOT(shortMessageShow()));
     
-    //on regroupe les trois actions afin de ne pas pouvoir en faire 2 en même temps
+    //on regroupe les trois actions afin de ne pas 
+	//pouvoir en faire 2 en même temps
     m_messageActGr = new QActionGroup(this);
     m_messageActGr->addAction(m_shortMessageAct);
     m_messageActGr->addAction(m_mediumMessageAct);
     m_messageActGr->addAction(m_longMessageAct);
 
-    m_nextCompileErrorAct = new QAction(QIcon(":/images/next.png"),tr("Erreur &suivante"),this);
+    m_nextCompileErrorAct = new QAction(
+	QIcon(":/images/next.png"),tr("Erreur &suivante"),this);
     m_nextCompileErrorAct->setShortcut(tr("F4"));
     m_nextCompileErrorAct->setStatusTip(tr("Erreur suivante"));
     m_nextCompileErrorAct->setEnabled(false);
-    connect(m_nextCompileErrorAct,SIGNAL(triggered()),m_compilerOutput,SLOT(searchNextError()));
+    connect(m_nextCompileErrorAct,SIGNAL(triggered()),
+	m_compilerOutput,SLOT(searchNextError()));
 
-    m_previousCompileErrorAct = new QAction(QIcon(":/images/previous.png"),tr("Erreur &précédente"),this);
+    m_previousCompileErrorAct = new QAction(
+	QIcon(":/images/previous.png"),tr("Erreur &précédente"),this);
     m_previousCompileErrorAct->setShortcut(tr("Shift+F4"));
-    m_previousCompileErrorAct->setStatusTip(tr("Erreur précédente"));
+    m_previousCompileErrorAct->setStatusTip(
+	tr("Erreur précédente"));
     m_previousCompileErrorAct->setEnabled(false);
-    connect(m_previousCompileErrorAct,SIGNAL(triggered()),m_compilerOutput,SLOT(searchPreviousError()));
+    connect(m_previousCompileErrorAct,SIGNAL(triggered()),
+	m_compilerOutput,SLOT(searchPreviousError()));
     
-    m_printAct = new QAction(QIcon(":/images/print.png"),tr("&Imprimer"),this);
+    m_printAct = new QAction(QIcon(":/images/print.png"),
+	tr("&Imprimer"),this);
     m_printAct->setShortcut(tr("Ctrl+P"));
     m_printAct->setStatusTip(tr("Imprimer"));
     connect(m_printAct,SIGNAL(triggered()),this,SLOT(print()));
@@ -1285,9 +1401,12 @@ void MainWindow::createStatusBar()
 //lecture des propriétés de l'application
 void MainWindow::readSettings()
 {
-    QSettings settings("Département Informatique de l'Université d'Angers", "EDI Free Pascal");
-    QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
-    QSize size = settings.value("size", QSize(400, 400)).toSize();
+    QSettings settings("Département Informatique de \
+	l'Université d'Angers", "EDI Free Pascal");
+    QPoint pos = 
+	settings.value("pos", QPoint(200, 200)).toPoint();
+    QSize size = 
+	settings.value("size", QSize(400, 400)).toSize();
     resize(size);
     move(pos);
 }
@@ -1295,18 +1414,21 @@ void MainWindow::readSettings()
 //ériture des propriétés de l'application
 void MainWindow::writeSettings()
 {
-    QSettings settings("Département Informatique de l'Université d'Angers", "EDI Free Pascal");
+    QSettings settings("Département Informatique de \
+	l'Université d'Angers", "EDI Free Pascal");
     settings.setValue("pos", pos());
     settings.setValue("size", size());
 }
 
-//recherche si le composant Scintilla à été sauvegardé depuis les modifications
+//recherche si le composant Scintilla à été sauvegardé 
+//depuis les modifications
 bool MainWindow::maybeSave()
 {
     if (m_textEdit->isModified()) {
-        int ret = QMessageBox::warning(this, tr("EDI Free Pascal"),
-                     tr("Le document a été modifié.\n"
-                        "Voulez-vous sauvegarder les changements?"),
+        int ret = QMessageBox::warning(this,
+		tr("EDI Free Pascal"),
+        tr("Le document a été modifié.\n"
+       "Voulez-vous sauvegarder les changements?"),
                      QMessageBox::Yes | QMessageBox::Default,
                      QMessageBox::No,
                      QMessageBox::Cancel | QMessageBox::Escape);
@@ -1324,7 +1446,7 @@ void MainWindow::loadFile(const QString &fileName)
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly)) {
         QMessageBox::warning(this, tr("EDI Free Pascal"),
-                             tr("Impossible de lire le fichier %1:\n%2.")
+         tr("Impossible de lire le fichier %1:\n%2.")
                              .arg(fileName)
                              .arg(file.errorString()));
         return;
@@ -1337,7 +1459,8 @@ void MainWindow::loadFile(const QString &fileName)
 
     setCurrentFile(fileName);
     statusBar()->showMessage(tr("Fichier chargé"), 2000);
- //	path = QFileInfo(fileName).path();// stock le chemin de fichier du fichier sauvegarder
+ //	path = QFileInfo(fileName).path();// stock le chemin 
+ //de fichier du fichier sauvegarder
 }
 
 //Sauvegarde un fichier
@@ -1346,7 +1469,7 @@ bool MainWindow::saveFile(const QString &fileName)
     QFile file(fileName);
     if (!file.open(QFile::WriteOnly)) {
         QMessageBox::warning(this, tr("EDI Free Pascal"),
-                             tr("Impossible d'écrire sur le fichier %1:\n%2.")
+          tr("Impossible d'écrire sur le fichier %1:\n%2.")
                              .arg(fileName)
                              .arg(file.errorString()));
         return false;
@@ -1359,7 +1482,8 @@ bool MainWindow::saveFile(const QString &fileName)
 
     setCurrentFile(fileName);
     statusBar()->showMessage(tr("Fichier sauvegardé"), 2000);
-   // path = QFileInfo(fileName).path();// stock le chemin de fichier du fichier sauvegarder
+   // path = QFileInfo(fileName).path();// stock le 
+   //chemin de fichier du fichier sauvegarder
 	return true;
 }
 
@@ -1376,7 +1500,8 @@ void MainWindow::setCurrentFile(const QString &fileName)
     else
         shownName = strippedName(m_curFile);
 
-    setWindowTitle(tr("%1[*] - %2").arg(shownName).arg(tr("EDI FreePascal")));
+    setWindowTitle(tr("%1[*] - %2").arg(shownName).arg(
+	tr("EDI FreePascal")));
 }
 
 QString MainWindow::strippedName(const QString &fullFileName)

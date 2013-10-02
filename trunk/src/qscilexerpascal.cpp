@@ -72,6 +72,6 @@ const char *QsciLexerPascal::keywords(int set) const
 		then threadvar to true try type \
 		unit univ until uses \
 		value var view virutal volatile \
-		while with write \
+		while with write writeln\
 		xor";
 }

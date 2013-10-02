@@ -31,11 +31,7 @@ SettingWindow::SettingWindow(QWidget * parent, Qt::WFlags f) : QMainWindow(paren
     m_args = new QStringList();
     m_debugDisplay = NULL;
     this->setWindowTitle("Préférences");
-    #if defined(Q_OS_WIN)
-	m_OS=true;
-    #else 
-    	m_OS=false;
-    #endif
+
     createCompilerWidget();
     createPathWidget();
     createAdvanceWidget();
@@ -49,8 +45,6 @@ SettingWindow::SettingWindow(QWidget * parent, Qt::WFlags f) : QMainWindow(paren
     connect (m_defaultSettingButton,SIGNAL(clicked()),this,SLOT(loadDefaultSetting()));
     connect(m_okButton,SIGNAL(clicked()),this,SLOT(saveFile()));
     connect(m_debugOption,SIGNAL(clicked(bool)),parent,SLOT(setDebugActivated(bool)));
-
-
 }
 
 //destructeur
