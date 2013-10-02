@@ -98,6 +98,11 @@ IF(WIN32)
 	SET(mingw_include_dir ${mingw_install_path}/include)
 	SET(mingw_lib_dir ${mingw_install_path}/lib)
 	
+	if(MINGW) 
+		Message("Mingw option")	
+		SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -static-libgcc")
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++")
+	endif()
 	include_directories(${qt_include_dir} ${mingw_include_dir})
 	link_directories(${qt_lib_dir} ${mingw_lib_dir})
 	
