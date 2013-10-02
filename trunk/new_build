@@ -1,4 +1,4 @@
-#!/bin/bash
+﻿#!/bin/bash
 if [ -d build];
 	echo "Suppression du répertoire build existant !";
 	then rm -rf build;
@@ -7,7 +7,9 @@ echo "Création d'un répertoire build"
 mkdir build
 cd build
 echo "Génération du Makefile par CMAKE" 
-cmake ../ -DCMAKE_SYSTEM_NAME=Linux
+#cmake ../ -DCMAKE_SYSTEM_NAME=Linux
+cmake ../ -G "MinGW Makefiles"
+
 make 
 #-DCMAKE_INSTALL_PREFIX=/usr ..
 #echo "Dénération du Paquet Debian"

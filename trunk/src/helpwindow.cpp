@@ -60,8 +60,8 @@ HelpWindow::HelpWindow(QWidget * parent, Qt::WFlags f) : QMainWindow(parent, f)
 #if defined Q_OS_LINUX
 QString DOC_PATH = "DOC_PATH_X11=";
 m_PATH = new QString("doc/"); 
-#elif Q_OS_WIN
-DOC_PATH = new QString("DOC_PATH_WIN32=");
+#elif defined Q_OS_WIN
+QString DOC_PATH = "DOC_PATH_WIN32=";
 m_PATH = new QString(QLatin1String("doc\\"));
 #endif
                 while (!file->atEnd())

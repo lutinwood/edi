@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 //app.setGraphicsSystem("native");
     QTranslator translator;
     #if defined(Q_OS_WIN)
-	translator.load("qt_fr","C:\Qt\4.2.3\translations");
+	translator.load("qt_fr","C:\\Qt_static\\translations");
     #else 
     	translator.load("qt_fr","/opt/qt_static_4_8_4/translations");
     #endif

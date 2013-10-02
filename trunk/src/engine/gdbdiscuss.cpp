@@ -65,7 +65,7 @@ void GdbDiscuss::FileConf()
 #if defined Q_OS_LINUX
       QString  gdb_path = "GDB_PATH_X11=";
 #elif defined Q_OS_WIN
-      gdb_path = new QString("GDB_PATH_WIN32=");
+      QString gdb_path = "GDB_PATH_WIN32=";
 #endif
             while (!file->atEnd() && !find)
             {

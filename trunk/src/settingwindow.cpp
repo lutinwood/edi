@@ -58,14 +58,14 @@ SettingWindow::~SettingWindow(){}
 
 void SettingWindow::setPath()
 {
-#if define Q_OS_LINUX
+#if defined Q_OS_LINUX
 QString FPC_PATH = "FPC_PATH_X11=";
 QString GDB_PATH = "GDB_PATH_X11=";
 QString DOC_PATH = "DOC_PATH_X11=";
-#elif Q_OS_WIN32
-FPC_PATH = new QString("FPC_PATH_WIN32=");
-GDB_PATH = new QString("GDB_PATH_WIN32=");
-DOC_PATH = new QString("DOC_PATH_WNI32=");
+#elif defined Q_OS_WIN32
+QString FPC_PATH = "FPC_PATH_WIN32=";
+QString GDB_PATH = "GDB_PATH_WIN32=";
+QString DOC_PATH = "DOC_PATH_WNI32=";
 
 #endif
 

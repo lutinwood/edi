@@ -81,8 +81,8 @@ void GlobalDiscuss::loadConsole()
                 QByteArray buffer(file.readLine());	
                 QString path(buffer);
 #if defined Q_OS_WIN               
-TERM_PATH = new QString("TERM_PATH_WIN32=");
-CONSOLE_PATH  = new QString("C:\\WINDOWS\\system32\\cmd.exe");
+QString TERM_PATH = "TERM_PATH_WIN32=";
+QString CONSOLE_PATH  = "C:\\WINDOWS\\system32\\cmd.exe";
 #elif defined Q_OS_LINUX
 QString TERM_PATH = "TERM_PATH_X11=";
 
