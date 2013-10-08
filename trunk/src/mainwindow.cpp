@@ -83,6 +83,8 @@ MainWindow::MainWindow()
     this->addDockWidget(Qt::BottomDockWidgetArea,
 	m_dockWidget,Qt::Horizontal);
 
+//QApplication:->installEventFilter(this);
+
     readSettings();
 
     connect(m_textEdit,
@@ -302,9 +304,10 @@ void MainWindow::setting()
 void MainWindow::about()
 {
  QMessageBox::about(this, tr("A Propos"),
-	tr(	"Application crée par Vilayvanh MANIVONG \
-		et Julien COURCELLE au sein du département \
-		Informatique de l'Université d'Angers"));
+    tr(	"Version 13.10 \n\n"
+        "Auteurs: \n"
+        "Vilayvanh MANIVONG, Julien COURCELLE \n\n"
+        "Département Informatique de l'Université d'Angers"));
 }
 
 //fenêtre d'aide
@@ -961,13 +964,10 @@ file.write("--> Arguments du compilateur FPC <--\n");
 file.write("FPC_ARGS=-g -Fr/usr/lib/fpc/2.4.4/msg/errorf.msg \n");
 file.write("--> Chemin menant au débogueur GDB sous Linux <--\n");
 file.write("GDB_PATH_X11=/usr/bin/gdb\n");
-file.write("--> Chemin menant aux différents \
-			terminaux sous Linux <--\n");
-file.write("TERM_PATH_X11=/usr/bin/konsole,\
-			/usr/bin/xterm,/usr/bin/gnome-terminal\n");
-file.write("--> Chemin du dossier contenant \
-			la documentation sous Linux <--\n");
-file.write("DOC_PATH_X11=~/.EDI/doc\n");
+file.write("--> Chemin menant aux différents terminaux sous Linux <--\n");
+file.write("TERM_PATH_X11=/usr/bin/konsole,/usr/bin/xterm,/usr/bin/gnome-terminal\n");
+file.write("--> Chemin du dossier contenant la documentation sous Linux <--\n");
+file.write("DOC_PATH_X11=/usr/share/doc/fpc-2.4.4/user_doc/ref\n");
 
 #elif defined Q_OS_WIN32
 file.write("--> Chemin menant au compilateur FPC sous Windows <--\n");
@@ -1502,6 +1502,10 @@ void MainWindow::setCurrentFile(const QString &fileName)
 
     setWindowTitle(tr("%1[*] - %2").arg(shownName).arg(
 	tr("EDI FreePascal")));
+}
+
+bool MainWindow::eventFilter(QObject* watched, QEvent *event){
+    return event->type() == QEvent::ToolTip;
 }
 
 QString MainWindow::strippedName(const QString &fullFileName)

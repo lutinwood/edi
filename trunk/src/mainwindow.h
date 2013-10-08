@@ -401,8 +401,11 @@ class MainWindow : public QMainWindow
 	*Fonction affichant le nom du fichier courant dans la fenêtre principale
 	*/
 	void setCurrentFile ( const QString &fileName );
-	
-	/**
+
+    bool eventFilter(QObject* watched, QEvent *event);
+
+
+    /**bool MainWindow::eventFilter(QObject* watched, QEvent *event)
 	*
 	*/
 	QString strippedName ( const QString &fullFileName );

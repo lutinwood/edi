@@ -26,22 +26,23 @@ OSE.  See the         *
 int main(int argc, char *argv[])
 {
     Q_INIT_RESOURCE(application);
-    QApplication app(argc, argv);     
-	QTranslator translator;
+    QApplication app(argc, argv);
+    QTranslator translator;
 #if defined Q_OS_WIN
-	translator.load("qt_fr","C:\\Qt_static\\translations");
-#else 
+    translator.load("qt_fr","C:\\Qt_static\\translations");
+#else
     translator.load("qt_fr","/opt/qt_static_4_8_4/translations");
 #endif
-	app.setStyle("plastique");
+    app.setStyle("plastique");
     app.installTranslator(&translator);
 
     QSplashScreen splash(QPixmap(QString
-	(":/images/splashscreen.png"),
-	0,Qt::AutoColor),0);
-    
-	splash.show();
+    (":/images/splashscreen.png"),
+    0,Qt::AutoColor),0);
+
+    splash.show();
     MainWindow mainWin;
+    mainWin.setAttribute(Qt::WA_AlwaysShowToolTips,true);
     mainWin.show();
     splash.finish(&mainWin);
     return app.exec();
