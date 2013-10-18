@@ -415,6 +415,7 @@ class MainWindow : public QMainWindow
         QsciScintilla *m_textEdit;
         std::vector<int> m_debugMarkerVect;
 	QString m_curFile;
+        //QString m_version;
         ListWidget *m_compilerOutput;
         QTextEdit *m_debugOutput;
         QTextEdit *m_applicationOutput;

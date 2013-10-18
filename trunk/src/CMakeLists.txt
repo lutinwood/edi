@@ -1,5 +1,9 @@
 # Version actuelle lors de la première édition de ce fichier
 CMAKE_MINIMUM_REQUIRED (VERSION 2.8)
+SET(CMAKE_BUILD_TYPE Release)
+if (win32)
+SET(CMAKE_CXX_FLAGS mwindows)
+endif()
 
 # Nom du projet
 PROJECT (LightEdiPascal)
@@ -16,7 +20,7 @@ FILE(GLOB DEF *.h)
 
 ###		OPTIONS
 ###		
-# Ajout des Warning à la compilation
+# Ajout des Warning �  la compilation
 ADD_DEFINITIONS( -Wall -c )
 
 # Ajout du repertoire engine
@@ -37,6 +41,7 @@ IF(WIN32)
 	SET(QSCI_DIR "c:\\Qt_static")
     SET(QSCINTILLA_INCLUDE_DIR ${QSCI_DIR}\\include)   
 	SET(QSCINTILLA_LIBRARY ${QSCI_DIR}\\lib\\libqscintilla2.a)
+	
 ENDIF()
 
 ###		MOC FILES
@@ -87,6 +92,7 @@ Message("UNIX BASED")
 ENDIF()
 
 IF(WIN32)
+Message("windows Based")
 	SET(qt_install_path "c:/Qt_static")
 	SET(qt_include_dir  ${qt_install_path}/include)
 	set(qt_lib_dir ${qt_install_path}/lib)
@@ -96,9 +102,10 @@ IF(WIN32)
 	SET(mingw_lib_dir ${mingw_install_path}/lib)
 	
 	if(MINGW) 
+Message("with MINGW")
 		Message("Mingw option")	
 		SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -static-libgcc")
-		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++")
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++ -mwindows")
 	endif()
 	include_directories(${qt_include_dir} ${mingw_include_dir})
 	link_directories(${qt_lib_dir} ${mingw_lib_dir})
@@ -108,5 +115,5 @@ IF(WIN32)
 	TARGET_LINK_LIBRARIES (edi 
 	${QSCINTILLA_LIBRARY} ${QT_LIBARIES}
 	engine ${QT_QTEST_LIBRARY} QtGui QtCore ws2_32 
-	winmm Imm32 mingw32)
+	winmm Imm32 mingw32 gdi32)
 ENDIF()

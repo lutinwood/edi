@@ -33,6 +33,7 @@ MainWindow::MainWindow()
 
     initScintilla();
 
+    //QString m_version("13.10");
     m_findDialog = NULL;
     m_replaceDialog = NULL;
     m_lineDialog = NULL;
@@ -97,6 +98,7 @@ MainWindow::MainWindow()
 	SLOT(itemDoubleClicked(QListWidgetItem *)));
     
 //    QString path;
+    // TODO MOdifier to home
     setCurrentFile("");
     m_textEdit->setFocus();
 
@@ -304,7 +306,7 @@ void MainWindow::setting()
 void MainWindow::about()
 {
  QMessageBox::about(this, tr("A Propos"),
-    tr(	"Version 13.10 \n\n"
+    tr(	"Version 32bits 13.10 \n\n"
         "Auteurs: \n"
         "Vilayvanh MANIVONG, Julien COURCELLE \n\n"
         "Département Informatique de l'Université d'Angers"));
@@ -954,6 +956,7 @@ void MainWindow::initFileconf()
 
         file.open(QIODevice::WriteOnly);
 #if defined Q_OS_LINUX
+file.write("#Version : 32bits 13.10 ") ;
 file.write("--> Chemin menant au compilateur FPC sous Linux <--\n");
 //modifier par un appel system `which fpc` qui retourne 
 //le chemin de l'executable
@@ -977,6 +980,7 @@ file.write("GDB_PATH_WIN32=C:\\FPC\\2.6.2\\bin\\i386-win32\\gdb.exe\n");
 file.write("--> Chemin menant au terminal de Windows <--\n");
 file.write("TERM_PATH_WIN32=C:\\WINDOWS\\system32\\cmd.exe\n");
 file.write("--> Chemin du dossier contenant la documentation sous Windows <--\n");
+//a modifier
 file.write("DOC_PATH_WIN32=doc\\fpdocs-2.0.4\\\n");
 
 #endif
@@ -1501,7 +1505,7 @@ void MainWindow::setCurrentFile(const QString &fileName)
         shownName = strippedName(m_curFile);
 
     setWindowTitle(tr("%1[*] - %2").arg(shownName).arg(
-	tr("EDI FreePascal")));
+        tr("EDI FreePascal 32Bits 13.10")));
 }
 
 bool MainWindow::eventFilter(QObject* watched, QEvent *event){

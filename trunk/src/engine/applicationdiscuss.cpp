@@ -109,7 +109,7 @@ void ApplicationDiscuss::Execute(QString appName)
 #elif defined Q_OS_WIN32
             m_prog->start((*m_console));
             //puis on lance l'application avec start
-            m_prog->write(QString(tr("start /WAIT ")+str_tmp + tr("\n")).toLatin1());
+            m_prog->write(QString(tr("start ")+str_tmp + tr("\n")).toLatin1());
             m_prog->write("exit\n");
 #endif  
     }
