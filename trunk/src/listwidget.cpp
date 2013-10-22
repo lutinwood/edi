@@ -163,8 +163,9 @@ void ListWidget::searchNextError()
 {
     if (this->contains(tr("aborted")) || this->contains(tr("échoué")))
     {
-        int numError = (int) malloc(sizeof(int)*42);
-        std::vector<erreur>::iterator it;
+       // int numError = (int) malloc(sizeof(int) * 42);
+        int  numError= 0;
+	std::vector<erreur>::iterator it;
         for(it = m_listError.begin(); it != m_listError.end() ; it++)
         {
             if ((*it).numLigneList == this->currentRow())
@@ -193,7 +194,7 @@ void ListWidget::searchPreviousError()
 {
     if (this->contains(tr("aborted")) || this->contains(tr("échoué")))
     {
-        int numError = (int) malloc(sizeof(int)*42);
+        int numError= 0;
         std::vector<erreur>::iterator it;
         for(it = m_listError.begin(); it != m_listError.end() ; it++)
         {

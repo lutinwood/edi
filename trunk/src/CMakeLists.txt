@@ -67,7 +67,7 @@ INCLUDE(${QT_USE_FILE})
 IF(UNIX)
 Message("UNIX BASED")
 
-	SET(QSCI_DIR "/opt/qt_static_4_8_5")
+	SET(QSCI_DIR "/opt/qt_static")
 	SET(qt_include_dir ${QSCI_DIR}/include/)
         SET(qt_lib_directory ${QSCI_DIR}/lib)
         SET(QSCINTILLA_INCLUDE_DIR ${qt_include_dir})
