@@ -332,8 +332,10 @@ void GdbDiscuss::kill()
         {//si le pid c'est affiché dans le fichier on kill le processus
             QString str(tr("kill ")+QString::number(m_childPid,10));
             cout << str.toStdString() << endl;
-            system(str.toStdString().c_str());
-            m_childPid = -1;
+            //system(str.toStdString().c_str());
+		QProcess process;
+            process.start(str.toStdString().c_str());
+		m_childPid = -1;
         }
         if (m_terminal != NULL)
         {
