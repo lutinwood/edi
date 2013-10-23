@@ -87,7 +87,7 @@ Message("UNIX BASED")
 		engine ${QT_QTEST_LIBRARY} 
 		QtGui QtTest QtCore pthread X11 xcb Xrender Xext rt png12
 		SM fontconfig glib-2.0 freetype z gobject-2.0 ICE Xdmcp 
-		 pcre Xau expat dl Xi c stdc++ jpeg tiff
+		 pcre Xau expat dl Xi c stdc++ 
 		) 
 ENDIF()
 

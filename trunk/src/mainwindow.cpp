@@ -207,15 +207,19 @@ bool MainWindow::save()
 bool MainWindow::saveAs()
 {
 //création de la fernêtre enregistrer sous
-//QFileDialog dialog(this);
+QFileDialog dialog(this);
 //dialog.setNameFilter(tr("Pascal (*.pas)");
 //dialog.defaultSuffix("pas");
-//QFiledialog::setDefaultSuffix("pas");
-
- QString fileName = QFileDialog::getSaveFileName(
+//dialog.setDefaultSuffix("pas");
+//dialog.exec();
+//QString fileName = dialog.selectedFiles()[0];
+//STATIC CALL
+ QString fileName = dialog.getSaveFileName(
 			this,tr("Sauvegarder sous..."),
-			"untitled.pas",tr("Pascal (*.pas)"),options);
-	
+			"untitled.pas",tr("Pascal (*.pas)"));
+//Ajout du suffix
+QFileInfo file(fileName);
+if(file.suffix().isEmpty()) fileName += ".pas";	
 	if (fileName.isEmpty())
         	return false;
     
