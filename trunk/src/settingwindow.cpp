@@ -429,39 +429,22 @@ void SettingWindow::createPathWidget()
     QVBoxLayout *globalLayout = new QVBoxLayout(m_pathWidget);
 
 
-#if defined Q_OS_LINUX
     m_fpcPathtemp = new QLineEdit(this);
-    QLabel *fpctempLabel = new QLabel("Chemin de fpc pour Linux : ", this);
+    QLabel *fpctempLabel = new QLabel("Chemin de fpc : ", this);
 	
     m_gdbPathtemp = new QLineEdit(this);
-    QLabel *gdbtempLabel = new QLabel("Chemin de gdb pour Linux  : ", this);
+    QLabel *gdbtempLabel = new QLabel("Chemin de gdb : ", this);
 
     m_docPathtemp = new QLineEdit(this);
-    QLabel *doctempLabel = new QLabel("Chemin de la documentation sous Linux : ", this);
+    QLabel *doctempLabel = new QLabel("Chemin de la documentation : ", this);
 
     m_docIndextemp = new QLineEdit(this);
     QLabel *doctempIndexLabel = new QLabel("Nom du fichier index de la documentation : ", this);
-
-#elif defined Q_OS_WIN32
-    m_fpcPathtemp = new QLineEdit(this);
-    QLabel *fpcWIN32Label = new QLabel("Chemin de fpc pour Windows: ", this);
-
-    m_gdbPathtemp = new QLineEdit(this);
-    QLabel *gdbWIN32Label = new QLabel("Chemin de gdb pour Windows : ", this);
-    
-    m_docPathtemp = new QLineEdit(this);
-    QLabel *docWIN32Label = new QLabel("Chemin de la documentation sous Windows : ", this);
-
-    m_docIndextemp = new QLineEdit(this);
-    QLabel *docWIN32IndexLabel = new QLabel("Nom du fichier index de la documentation : ", this);
-#endif
-
 
 
     QGroupBox *pathGrBox = new QGroupBox(tr("Chemins des applications"),m_pathWidget);
     QGridLayout *pathLayout = new QGridLayout;
 
-#if defined Q_OS_LINUX
     pathLayout->addWidget(fpctempLabel,0,0);
     pathLayout->addWidget(m_fpcPathtemp,0,1);
     pathLayout->addWidget(gdbtempLabel,2,0);
@@ -471,34 +454,6 @@ void SettingWindow::createPathWidget()
     pathLayout->addWidget(doctempIndexLabel,6,0);
     pathLayout->addWidget(m_docIndextemp,6,1);
 
-        fpctempLabel->setDisabled(true);
-        m_fpcPathtemp->setDisabled(true);
-        gdbtempLabel->setDisabled(true);
-        m_gdbPathtemp->setDisabled(true);
-        doctempLabel->setDisabled(true);
-        m_docPathtemp->setDisabled(true);
-        doctempIndexLabel->setDisabled(true);
-        m_docIndextemp->setDisabled(true);
-#elif defined Q_OS_WIN32
-    pathLayout->addWidget(fpcWIN32Label,1,0);
-    pathLayout->addWidget(m_fpcPathWIN32,1,1);
-    pathLayout->addWidget(gdbWIN32Label,3,0);
-    pathLayout->addWidget(m_gdbPathWIN32,3,1);
-    pathLayout->addWidget(docWIN32Label,5,0);
-    pathLayout->addWidget(m_docPathWIN32,5,1);
-    pathLayout->addWidget(docWIN32IndexLabel,7,0);
-    pathLayout->addWidget(m_docIndexWIN32,7,1);
-
-        fpcWIN32Label->setDisabled(true);
-        m_fpcPathWIN32->setDisabled(true);
-        gdbWIN32Label->setDisabled(true);
-        m_gdbPathWIN32->setDisabled(true);
-        docWIN32Label->setDisabled(true);
-        m_docPathWIN32->setDisabled(true);
-        docWIN32IndexLabel->setDisabled(true);
-        m_docIndexWIN32->setDisabled(true);
-
-#endif
     pathGrBox->setLayout(pathLayout);
     globalLayout->addWidget(pathGrBox);
 }

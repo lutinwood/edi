@@ -100,14 +100,6 @@ class SettingWindow : public QMainWindow
         QRadioButton *m_XDefaultOption;
         QCheckBox *m_XsOption;
         //options des chemins
-        QLineEdit *m_fpcPathX11;
-        QLineEdit *m_fpcPathWIN32;
-        QLineEdit *m_gdbPathX11;
-        QLineEdit *m_gdbPathWIN32;
-        QLineEdit *m_docPathX11;
-        QLineEdit *m_docPathWIN32;
-        QLineEdit *m_docIndexX11;
-        QLineEdit *m_docIndexWIN32;
 
 	QLineEdit *m_fpcPathtemp;
 	QLineEdit *m_gdbPathtemp;
